@@ -1,0 +1,3 @@
+spawn:
+  desc: "Spawn command"
+  run: "mvtp <user> spawn"

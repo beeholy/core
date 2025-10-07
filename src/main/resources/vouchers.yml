@@ -1,0 +1,8 @@
+tag_skull:
+  name: "[SKULL] Tag voucher"
+  permission: "tag.skull"
+  lore:
+    - ""
+    - "| Click to apply tag"
+    - ""
+  commands: "lp user <user> permission set tag.skull true"

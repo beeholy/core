@@ -1,0 +1,14 @@
+<?xml version="1.0" ?>
+<!DOCTYPE xml>
+<project name="HolyCore" default="Build">
+
+    <xmlproperty file="pom.xml" prefix="pom" keeproot="false" />
+    <property name="foundation.version" value="${pom.properties.foundation.version}"/>
+
+    <target name="Build">
+        <jar jarfile="C:/Users/froom/Documents/PaperServer/plugins/${ant.project.name}.jar"
+             basedir="./target/classes/" includes="**/*">
+        </jar>
+    </target>
+
+</project>

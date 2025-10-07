@@ -1,0 +1,16 @@
+perms_invalid:
+  "You don't have valid permissions for this command."
+perms_already_have:
+  "You already have this permission"
+welcome_message:
+  "Welcome <username> to the server! Use /help to get started!"
+first_join_message:
+  "Welcome back <username>"
+chat_format:
+  "<player_tag><player_rank><hover:show_text:'<gold>| </gold>Username: <username>\n<gold>| </gold>Balance: <balance>'><player_gradient><display_name></reset></hover><gray> » </gray><player_color><data>"
+tablist_header:
+  "Welcome to <gold>HolyMC</gold>"
+tablist_footer:
+  "Remember to /vote for free rewards!"
+tablist_name_format:
+  "<player_rank><player_gradient><display_name></reset>"

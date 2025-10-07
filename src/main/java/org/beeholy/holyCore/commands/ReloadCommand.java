@@ -1,0 +1,33 @@
+package org.beeholy.holyCore.commands;
+
+import io.papermc.paper.command.brigadier.BasicCommand;
+import io.papermc.paper.command.brigadier.CommandSourceStack;
+import org.beeholy.holyCore.chat.Colors;
+import org.beeholy.holyCore.chat.Gradients;
+import org.beeholy.holyCore.chat.Tags;
+import org.beeholy.holyCore.items.Vouchers;
+import org.beeholy.holyCore.utility.Crates;
+import org.beeholy.holyCore.utility.Language;
+import org.beeholy.holyCore.utility.ScoreboardHelper;
+import org.beeholy.holyCore.utility.TextUtils;
+import org.jspecify.annotations.Nullable;
+
+public class ReloadCommand implements BasicCommand{
+
+    @Override
+    public void execute(CommandSourceStack commandSourceStack, String[] strings) {
+        Colors.reload();
+        Gradients.reload();
+        Tags.reload();
+        Language.reload();
+        Crates.reload();
+        Vouchers.reload();
+        ScoreboardHelper.reload();
+        commandSourceStack.getSender().sendMessage(TextUtils.deserialize(Language.get("config_reload")));
+    }
+
+    @Override
+    public @Nullable String permission() {
+        return "holycore.reload";
+    }
+}

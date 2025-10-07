@@ -1,0 +1,7 @@
+# Supports MiniMessage formatting and PAPI
+title: "<gold>HolyMC</gold>"
+# Maximum of 15 slots
+slots:
+  - "----------------"
+  - "ɴᴀᴍᴇ: %player_name%"
+  - "ʙᴀʟᴀɴᴄᴇ: $%formatter_number_shorten_{vault_eco_balance}%"

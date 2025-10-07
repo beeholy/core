@@ -1,0 +1,4 @@
+quest_name:
+  name: "<blue>styled name</blue>"
+  action: "MINE"
+  block:

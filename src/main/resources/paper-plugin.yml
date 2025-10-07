@@ -1,0 +1,26 @@
+name: HolyCore
+version: '1.0'
+main: org.beeholy.holyCore.HolyCore
+bootstrapper: org.beeholy.holyCore.Bootstrap
+api-version: '1.21'
+libraries:
+  - org.mysql.mysql-connector-j:9.3.0
+dependencies:
+  server:
+    Vault:
+      load: BEFORE
+      required: true
+      join-classpath: true
+    LuckPerms:
+      load: BEFORE
+      required: true
+      join-classpath: true
+    VotifierPlus:
+      load: BEFORE
+      required: true
+    DiscordSRV:
+      load: AFTER
+      required: false
+    PlaceholderAPI:
+      load: BEFORE
+      required: false

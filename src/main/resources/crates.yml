@@ -1,0 +1,32 @@
+vote:
+  name: "<#00FF00>Vote Crate"
+  key:
+    name: "<gold>Vote Crate Key</gold>"
+    lore:
+      - "Use this key at"
+      - "/warp crates"
+    custom_model: 0
+  location:
+    - "world,0,64,64"
+  rewards:
+    small_xp_pouch:
+      name: "Small XP Pouch"
+      material: "NAME_TAG"
+      custom_model: 0
+      lore:
+        - "Contains XP"
+        - "Use it wisely"
+        - ""
+        - "Weight: 2"
+      chance: 2.0
+      command: "give %player% experience_bottle 5"
+    small_money_pouch:
+      name: "Small Money Pouch"
+      material: "NAME_TAG"
+      custom_model: 0;
+      lore:
+        - "A pouch of coins"
+        - ""
+        - "Weight: 3"
+      chance: 3.0
+      command: "eco give %player% 100"
