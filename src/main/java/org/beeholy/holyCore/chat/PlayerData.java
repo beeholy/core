@@ -8,12 +8,11 @@ import org.bukkit.persistence.PersistentDataType;
 import java.util.List;
 
 public class PlayerData {
-    public static boolean setString(Player player, String key, String value) {
-        if (player == null) return false;
-        if (key == null || key.isEmpty()) return false;
+    public static void setString(Player player, String key, String value) {
+        if (player == null) return;
+        if (key == null || key.isEmpty()) return;
         NamespacedKey namespacedKey = new NamespacedKey(HolyCore.getInstance(), key);
         player.getPersistentDataContainer().set(namespacedKey, PersistentDataType.STRING, value);
-        return true;
     }
 
     public static String getString(Player player, String key) {

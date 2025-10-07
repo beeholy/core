@@ -8,6 +8,7 @@ import org.beeholy.holyCore.chat.Gradients;
 import org.beeholy.holyCore.chat.Tags;
 import org.beeholy.holyCore.economy.FlyTime;
 import org.beeholy.holyCore.hooks.LPHook;
+import org.beeholy.holyCore.hooks.PAPIExpansion;
 import org.beeholy.holyCore.items.Vouchers;
 import org.beeholy.holyCore.listeners.*;
 import org.beeholy.holyCore.utility.*;
@@ -64,6 +65,9 @@ public final class HolyCore extends JavaPlugin {
         LuckPerms luckPerms = LuckPermsProvider.get();
         final Map<String, Integer> rankPriority = LPHook.getRankPriority();
 
+        if (Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI")) { //
+            new PAPIExpansion(this).register(); //
+        }
 
         // Scheduled task, per second updates
         new BukkitRunnable() {

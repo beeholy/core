@@ -118,4 +118,4 @@ public class Scoreboard {
         return ChatColor.values()[slot].toString();
     }
 
-}g=
+}
