@@ -33,8 +33,8 @@ public class PlayerJoinListener implements Listener {
         });
 
         // Set up scoreboard
-        ScoreboardHelper helper = ScoreboardHelper.createScore(player);
-        ScoreboardHelper.updateScoreboard(player);
+        Scoreboard helper = Scoreboard.createScore(player);
+        Scoreboard.updateScoreboard(player);
 
         Tablist.send(player);
 

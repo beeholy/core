@@ -11,7 +11,6 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.scoreboard.DisplaySlot;
 import org.bukkit.scoreboard.Objective;
-import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.Team;
 
 import java.io.File;
@@ -22,9 +21,9 @@ import java.util.UUID;
 /**
  * @author crisdev333
  */
-public class ScoreboardHelper {
+public class Scoreboard {
 
-    private static final HashMap<UUID, ScoreboardHelper> players = new HashMap<>();
+    private static final HashMap<UUID, Scoreboard> players = new HashMap<>();
     private static String title;
     private static List<String> slots;
 
@@ -32,11 +31,11 @@ public class ScoreboardHelper {
         reload();
     }
 
-    private final Scoreboard scoreboard;
+    private final org.bukkit.scoreboard.Scoreboard scoreboard;
     private final Objective sidebar;
     private final MiniMessage mm = MiniMessage.miniMessage();
 
-    private ScoreboardHelper(Player player) {
+    private Scoreboard(Player player) {
         scoreboard = Bukkit.getScoreboardManager().getNewScoreboard();
         sidebar = scoreboard.registerNewObjective("sidebar", "dummy");
         sidebar.setDisplaySlot(DisplaySlot.SIDEBAR);
@@ -72,21 +71,21 @@ public class ScoreboardHelper {
         return players.containsKey(player.getUniqueId());
     }
 
-    public static ScoreboardHelper createScore(Player player) {
-        return new ScoreboardHelper(player);
+    public static Scoreboard createScore(Player player) {
+        return new Scoreboard(player);
     }
 
-    public static ScoreboardHelper getByPlayer(Player player) {
+    public static Scoreboard getByPlayer(Player player) {
         return players.get(player.getUniqueId());
     }
 
-    public static ScoreboardHelper removeScore(Player player) {
+    public static Scoreboard removeScore(Player player) {
         return players.remove(player.getUniqueId());
     }
 
     public static void updateScoreboard(Player player) {
         if (hasScore(player)) {
-            ScoreboardHelper helper = getByPlayer(player);
+            Scoreboard helper = getByPlayer(player);
             helper.setTitle(PlaceholderAPI.setPlaceholders(player, title));
             for (int i = 0; i < slots.size(); i++) {
                 helper.setSlot(15 - i, PlaceholderAPI.setPlaceholders(player, slots.get(i)));
@@ -119,4 +118,4 @@ public class ScoreboardHelper {
         return ChatColor.values()[slot].toString();
     }
 
-}
+}g=

@@ -8,7 +8,7 @@ import org.beeholy.holyCore.chat.Tags;
 import org.beeholy.holyCore.items.Vouchers;
 import org.beeholy.holyCore.utility.Crates;
 import org.beeholy.holyCore.utility.Language;
-import org.beeholy.holyCore.utility.ScoreboardHelper;
+import org.beeholy.holyCore.utility.Scoreboard;
 import org.beeholy.holyCore.utility.TextUtils;
 import org.jspecify.annotations.Nullable;
 
@@ -22,7 +22,7 @@ public class ReloadCommand implements BasicCommand {
         Language.reload();
         Crates.reload();
         Vouchers.reload();
-        ScoreboardHelper.reload();
+        Scoreboard.reload();
         commandSourceStack.getSender().sendMessage(TextUtils.deserialize(Language.get("config_reload")));
     }
 

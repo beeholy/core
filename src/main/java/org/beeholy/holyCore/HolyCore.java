@@ -46,7 +46,7 @@ public final class HolyCore extends JavaPlugin {
         FlyTime.setup();
         Crates.setup();
         Language.setup();
-        ScoreboardHelper.reload();
+        Scoreboard.reload();
 
         // register simple commands
         Commands.registerCommands(this);
@@ -73,7 +73,7 @@ public final class HolyCore extends JavaPlugin {
 
                 for (Player player : Bukkit.getOnlinePlayers()) {
                     // Update Scoreboard
-                    ScoreboardHelper.updateScoreboard(player);
+                    Scoreboard.updateScoreboard(player);
                     // Order, style and update tablist
                     Tablist.send(player);
 
