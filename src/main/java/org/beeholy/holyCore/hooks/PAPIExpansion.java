@@ -1,5 +1,6 @@
 package org.beeholy.holyCore.hooks;
 
+import me.clip.placeholderapi.PlaceholderAPI;
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
@@ -55,8 +56,7 @@ public class PAPIExpansion extends PlaceholderExpansion {
                 return LegacyComponentSerializer
                         .legacySection()
                         .serialize(MiniMessage.miniMessage()
-                        .deserialize(Gradients.getGradient(param.get(1)) + param.get(2) + "</gradient>"));
-
+                        .deserialize(Gradients.getGradient(param.get(1)) + PlaceholderAPI.setBracketPlaceholders(player, param.get(2)) + "</gradient>"));
             }
         }
 

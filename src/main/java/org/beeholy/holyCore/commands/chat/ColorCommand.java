@@ -25,7 +25,7 @@ public class ColorCommand implements BasicCommand {
 
         if (args.length == 0) {
             PermissionMenu menu = new PermissionMenu(
-                    TextUtils.deserialize("Chat Colors"),
+                    TextUtils.deserialize("           ᴄʜᴀᴛ ᴄᴏʟᴏʀѕ"),
                     "color", "color_name",
                     pp,
                     "<colors:<data>><data></colors>");

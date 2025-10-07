@@ -25,7 +25,7 @@ public class TagCommand implements BasicCommand {
 
         if (args.length == 0) {
             PermissionMenu menu = new PermissionMenu(
-                    TextUtils.deserialize("Tags"),
+                    TextUtils.deserialize("              ᴄʜᴀᴛ ᴛᴀɢѕ"),
                     "tag",
                     "tag_name",
                     pp,

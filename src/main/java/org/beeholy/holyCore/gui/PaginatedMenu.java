@@ -1,12 +1,14 @@
 package org.beeholy.holyCore.gui;
 
 import net.kyori.adventure.text.Component;
+import org.beeholy.holyCore.utility.TextUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.inventory.meta.components.CustomModelDataComponent;
 
 import java.util.List;
 
@@ -72,17 +74,34 @@ public abstract class PaginatedMenu<T> extends Menu {
 
         // Navigation Buttons
         if (items.size() > pageSize) {
-            inv.setItem(previousIndex, createControlItem(Material.ARROW, ChatColor.YELLOW + "Previous Page"));
-            inv.setItem(nextIndex, createControlItem(Material.ARROW, ChatColor.YELLOW + "Next Page"));
+            inv.setItem(previousIndex, createControlItem("left_arrow", "<italic:false><gray>Previous</gray>"));
+            inv.setItem(nextIndex, createControlItem("right_arrow", "<italic:false><gray>Next</gray>"));
         }
 
-        inv.setItem(closeIndex, createControlItem(Material.BARRIER, ChatColor.RED + "Close Menu"));
+        inv.setItem(closeIndex, createControlItem("close", "<italic:false><red>Close</red>"));
     }
 
-    protected ItemStack createControlItem(Material material, String name) {
-        ItemStack item = new ItemStack(material);
+    protected ItemStack createControlItem(String type, String name) {
+        ItemStack item = new ItemStack(Material.LIGHT_GRAY_STAINED_GLASS_PANE);
         ItemMeta meta = item.getItemMeta();
-        meta.setDisplayName(name);
+        CustomModelDataComponent component = meta.getCustomModelDataComponent();
+        switch(type){
+            case "left_arrow":
+                component.setStrings(List.of("ui_left_arrow"));
+                break;
+            case "right_arrow":
+                component.setStrings(List.of("ui_right_arrow"));
+                break;
+            case "close":
+                component.setStrings(List.of("ui_close"));
+                break;
+            case "blank":
+                component.setStrings(List.of("ui_blank"));
+                meta.setHideTooltip(true);
+                break;
+        }
+        meta.setCustomModelDataComponent(component);
+        meta.displayName(TextUtils.deserialize(name));
         item.setItemMeta(meta);
         return item;
     }

@@ -25,7 +25,7 @@ public class GradientCommand implements BasicCommand {
 
         if (args.length == 0) {
             PermissionMenu menu = new PermissionMenu(
-                    TextUtils.deserialize("Gradients"),
+                    TextUtils.deserialize("          ɴᴀᴍᴇ ɢʀᴀᴅɪᴇɴᴛѕ"),
                     "gradient",
                     "gradient_name",
                     pp,
