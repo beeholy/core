@@ -1,20 +1,17 @@
 package org.beeholy.holyCore.events;
 
-import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
-import org.jetbrains.annotations.NotNull;
 
 public class PunishEvent extends Event {
 
     private static final HandlerList handlers = new HandlerList();
 
-    private String player;
-    private String punisher;
-    private String punishment;
-    private String duration;
-    private String reason;
+    private final String player;
+    private final String punisher;
+    private final String punishment;
+    private final String duration;
+    private final String reason;
 
     public PunishEvent(String player, String punisher, String punishment, String duration, String reason) {
         super(false);
@@ -24,6 +21,11 @@ public class PunishEvent extends Event {
         this.duration = duration;
         this.reason = reason;
     }
+
+    public static HandlerList getHandlerList() {
+        return handlers;
+    }
+
     public String getPlayer() {
         return player;
     }
@@ -36,16 +38,12 @@ public class PunishEvent extends Event {
         return punishment;
     }
 
-    public String getReason(){
+    public String getReason() {
         return reason;
     }
 
     public String getDuration() {
         return duration;
-    }
-
-    public static HandlerList getHandlerList() {
-        return handlers;
     }
 
     @Override

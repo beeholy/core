@@ -1,8 +1,6 @@
 package org.beeholy.holyCore.listeners;
 
 import org.beeholy.holyCore.HolyCore;
-import org.beeholy.holyCore.gui.RewardsMenu;
-import org.beeholy.holyCore.items.Vouchers;
 import org.beeholy.holyCore.model.Crate;
 import org.beeholy.holyCore.model.Reward;
 import org.beeholy.holyCore.utility.Crates;
@@ -16,9 +14,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.event.server.ServerLoadEvent;
-import org.bukkit.event.world.WorldInitEvent;
-import org.bukkit.event.world.WorldLoadEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -48,10 +43,10 @@ public class CratesListeners implements Listener {
         NamespacedKey key = new NamespacedKey(HolyCore.getInstance(), "crate_key");
         if (!(itemMeta.getPersistentDataContainer().has(key))) return;
 
-        if(crate.getKey().equals(itemMeta.getPersistentDataContainer().get(key, PersistentDataType.STRING))){
+        if (crate.getKey().equals(itemMeta.getPersistentDataContainer().get(key, PersistentDataType.STRING))) {
             // roll rewards / open crate gui
             // Check for space in inventory
-            if(player.getInventory().firstEmpty() != -1) {
+            if (player.getInventory().firstEmpty() != -1) {
                 Reward reward = Crates.rollReward(crate.getRewards());
                 CommandSender console = Bukkit.getServer().getConsoleSender();
                 String command = reward.getCommand().replace("<user>", player.getName());

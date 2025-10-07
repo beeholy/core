@@ -11,7 +11,7 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 
 public class ResourcePack {
-    private static ResourcePackInfo getHash(){
+    private static ResourcePackInfo getHash() {
         HttpClient client = HttpClient.newHttpClient();
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create("https://holymc.uk/resource_pack/hash.txt"))

@@ -4,7 +4,6 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextDecoration;
 import org.beeholy.holyCore.HolyCore;
 import org.beeholy.holyCore.gui.RewardsMenu;
-import org.beeholy.holyCore.utility.Crates;
 import org.beeholy.holyCore.utility.TextUtils;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -15,17 +14,16 @@ import org.bukkit.inventory.meta.components.CustomModelDataComponent;
 import org.bukkit.persistence.PersistentDataType;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 
 public class Crate {
     private String name;
-    private List<Reward> rewards;
-    private Location location;
-    private String key;
-    private String keyName;
-    private List<String> keyLore;
-    private String customModelData;
+    private final List<Reward> rewards;
+    private final Location location;
+    private final String key;
+    private final String keyName;
+    private final List<String> keyLore;
+    private final String customModelData;
 
     public Crate(String key, String name, List<Reward> rewards, Location location, String keyName, List<String> keyLore, String customModelData) {
         this.key = key;
@@ -41,13 +39,17 @@ public class Crate {
         return name;
     }
 
-    public ItemStack getKeyItem(){
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public ItemStack getKeyItem() {
         ItemStack item = new ItemStack(Material.NAME_TAG);
         ItemMeta meta = item.getItemMeta();
 
         // Deserialize lore
         List<Component> deserializedLore = new ArrayList<>();
-        for( String line : keyLore) {
+        for (String line : keyLore) {
             deserializedLore.add(TextUtils.deserialize(line).decorationIfAbsent(TextDecoration.ITALIC, TextDecoration.State.FALSE));
         }
 
@@ -67,11 +69,7 @@ public class Crate {
         return item;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getKey(){
+    public String getKey() {
         return key;
     }
 

@@ -4,9 +4,9 @@ import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.luckperms.api.LuckPerms;
 import net.luckperms.api.LuckPermsProvider;
 import org.beeholy.holyCore.chat.Colors;
-import org.beeholy.holyCore.economy.FlyTime;
 import org.beeholy.holyCore.chat.Gradients;
 import org.beeholy.holyCore.chat.Tags;
+import org.beeholy.holyCore.economy.FlyTime;
 import org.beeholy.holyCore.hooks.LPHook;
 import org.beeholy.holyCore.items.Vouchers;
 import org.beeholy.holyCore.listeners.*;
@@ -20,11 +20,13 @@ import java.util.Map;
 
 public final class HolyCore extends JavaPlugin {
 
-    private final DatabaseManager dbManager = DatabaseManager.getInstance();
-
     private static HolyCore instance;
+    private final DatabaseManager dbManager = DatabaseManager.getInstance();
+    private final MiniMessage mm = MiniMessage.miniMessage();
 
-    private MiniMessage mm = MiniMessage.miniMessage();
+    public static HolyCore getInstance() {
+        return instance;
+    }
 
     @Override
     public void onEnable() {
@@ -89,9 +91,5 @@ public final class HolyCore extends JavaPlugin {
         // Plugin shutdown logic
         dbManager.close();
         this.getLogger().info("Disabling HolyCore");
-    }
-
-    public static HolyCore getInstance() {
-        return instance;
     }
 }

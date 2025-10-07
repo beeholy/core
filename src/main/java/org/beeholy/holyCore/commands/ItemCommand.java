@@ -12,11 +12,11 @@ import java.util.Collection;
 public class ItemCommand implements BasicCommand {
     @Override
     public void execute(CommandSourceStack source, String[] args) {
-        if(args[0].equals("give") && args.length == 3){
+        if (args[0].equals("give") && args.length == 3) {
             Player otherPlayer = Bukkit.getPlayerExact(args[1]);
-            if (otherPlayer != null){
+            if (otherPlayer != null) {
                 String item = args[2];
-                if(item.equals("spawner_pick")){
+                if (item.equals("spawner_pick")) {
                     otherPlayer.give(ItemFactory.createSpawnerPick());
                 }
             }

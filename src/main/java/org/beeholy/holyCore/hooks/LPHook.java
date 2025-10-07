@@ -4,7 +4,6 @@ import net.luckperms.api.LuckPerms;
 import net.luckperms.api.LuckPermsProvider;
 import net.luckperms.api.model.group.Group;
 
-
 import java.util.Map;
 import java.util.stream.Collectors;
 

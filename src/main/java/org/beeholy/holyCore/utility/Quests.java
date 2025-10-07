@@ -16,10 +16,11 @@ public class Quests {
     private static HashMap<UUID, Integer> mobsKilled;
 
     // Start quest
-    public static void addQuest(Player player){
+    public static void addQuest(Player player) {
 
     }
-    public static void getStatistic(Player player, String material){
+
+    public static void getStatistic(Player player, String material) {
         player.getStatistic(Statistic.MINE_BLOCK, Material.valueOf(material));
     }
 }

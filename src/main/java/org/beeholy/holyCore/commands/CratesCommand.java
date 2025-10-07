@@ -14,21 +14,20 @@ import org.bukkit.Bukkit;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.jspecify.annotations.Nullable;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
 public class CratesCommand implements BasicCommand {
 
-     public void giveKey(Player player, String crateName, int amount){
+    public void giveKey(Player player, String crateName, int amount) {
         Crate crate = Crates.getCrates().get(crateName);
         ItemStack key = crate.getKeyItem();
         key.setAmount(amount);
         PlayerGiveResult given = player.give(List.of(key), false);
         player.sendMessage(TextUtils.deserialize(Language.get("crate_keys_given"), String.valueOf(amount), crate.getName()));
         Collection<ItemStack> leftover = given.leftovers();
-        if(!leftover.isEmpty()){
+        if (!leftover.isEmpty()) {
             ItemStack leftoverStack = (ItemStack) leftover.toArray()[0];
             int amountLeftover = leftoverStack.getAmount();
             Bukkit.getScheduler().runTaskAsynchronously(HolyCore.getInstance(), () -> {
@@ -38,35 +37,36 @@ public class CratesCommand implements BasicCommand {
             player.sendMessage(TextUtils.deserialize(Language.get("crates_overflow"), String.valueOf(amountLeftover)));
         }
     }
-    public void claimKeys(Player player){
+
+    public void claimKeys(Player player) {
         UUID uuid = player.getUniqueId();
         Bukkit.getScheduler().runTaskAsynchronously(HolyCore.getInstance(), () -> {
             DatabaseManager db = DatabaseManager.getInstance();
             Map<String, Integer> crates = db.getCratesClaims(uuid);
             int slotsNeeded = 0;
             // Find slots needed
-            for(String crateKey : crates.keySet()){
+            for (String crateKey : crates.keySet()) {
                 int crateStacks = crates.get(crateKey) / 64;
                 slotsNeeded += crateStacks + (crates.get(crateKey) % 64 == 0 ? 0 : 1);
             }
-            if(slotsNeeded == 0) {
+            if (slotsNeeded == 0) {
                 player.sendMessage(TextUtils.deserialize(Language.get("crate_no_claims")));
             }
             // Amount of empty player slots
             int emptySlots = (int) Arrays.stream(player.getInventory().getStorageContents())
                     .filter(Objects::isNull)
                     .count();
-            if(emptySlots >= slotsNeeded) {
+            if (emptySlots >= slotsNeeded) {
                 // Give player crate keys
-                for(String crateKey : crates.keySet()){
+                for (String crateKey : crates.keySet()) {
                     int crateStacks = crates.get(crateKey) / 64;
                     int crateRemainder = crates.get(crateKey) % 64;
-                    if(crateStacks >= 1) {
-                        for(int i = 0; i < crateStacks; i++){
+                    if (crateStacks >= 1) {
+                        for (int i = 0; i < crateStacks; i++) {
                             giveKey(player, crateKey, 64);
                         }
                     }
-                    if(crateRemainder > 0) {
+                    if (crateRemainder > 0) {
                         giveKey(player, crateKey, crateRemainder);
                     }
                 }
@@ -77,14 +77,15 @@ public class CratesCommand implements BasicCommand {
             }
         });
     }
+
     @Override
     public void execute(CommandSourceStack source, String[] args) {
 
-        if(args.length == 0){
+        if (args.length == 0) {
             source.getSender().sendMessage(TextUtils.deserialize(Language.get("crates_command_usage")));
             return;
         }
-        if(args.length > 4) {
+        if (args.length > 4) {
             source.getSender().sendMessage(TextUtils.deserialize(Language.get("crates_command_usage")));
             return;
         }
@@ -92,8 +93,8 @@ public class CratesCommand implements BasicCommand {
         if (subcommand == null) return;
         switch (subcommand.toLowerCase()) {
             case "set":
-                if(!source.getSender().hasPermission("crates.admin")) return;
-                if (!(source.getSender() instanceof Player player)){
+                if (!source.getSender().hasPermission("crates.admin")) return;
+                if (!(source.getSender() instanceof Player player)) {
                     source.getSender().sendMessage("This command can only be run by a player.");
                     return;
                 }
@@ -116,23 +117,23 @@ public class CratesCommand implements BasicCommand {
                 }
                 break;
             case "key":
-                if(!source.getSender().hasPermission("crates.admin")) return;
-                if(args.length >= 3) {
+                if (!source.getSender().hasPermission("crates.admin")) return;
+                if (args.length >= 3) {
                     String crateName = args[1];
                     String playerName = args[2];
                     Player otherPlayer = Bukkit.getServer().getPlayerExact(playerName);
-                    if(otherPlayer == null) {
+                    if (otherPlayer == null) {
                         source.getSender().sendMessage(TextUtils.deserialize(Language.get("player_not_found")));
                         return;
                     }
-                    if(Crates.getCrates().containsKey(crateName)) {
+                    if (Crates.getCrates().containsKey(crateName)) {
                         ItemStack key = Crates.getCrates().get(crateName).getKeyItem();
-                        if(args.length == 4) {
+                        if (args.length == 4) {
                             int amount;
                             try {
                                 amount = Integer.parseInt(args[3]);
                                 int maxStackSize = key.getMaxStackSize();
-                                if(amount > maxStackSize) {
+                                if (amount > maxStackSize) {
                                     source.getSender().sendMessage(TextUtils.deserialize(Language.get("max_stack_size"), Integer.toString(maxStackSize)));
                                     return;
                                 }
@@ -150,27 +151,27 @@ public class CratesCommand implements BasicCommand {
                 }
                 break;
             case "rewards":
-                if (!(source.getSender() instanceof Player player)){
+                if (!(source.getSender() instanceof Player player)) {
                     source.getSender().sendMessage("This command can only be run by a player.");
                     return;
                 }
-                if(args.length == 2) {
+                if (args.length == 2) {
                     String crateName = args[1];
-                    if(Crates.getCrates().containsKey(crateName)){
+                    if (Crates.getCrates().containsKey(crateName)) {
                         RewardsMenu menu = Crates.getCrates().get(crateName).menu();
                         player.openInventory(menu.getInventory());
                     }
                 }
                 break;
             case "claim":
-                if (!(source.getSender() instanceof Player player)){
+                if (!(source.getSender() instanceof Player player)) {
                     source.getSender().sendMessage("This command can only be run by a player.");
                     return;
                 }
                 claimKeys(player);
                 break;
             case "reload":
-                if(!source.getSender().hasPermission("crates.admin")) return;
+                if (!source.getSender().hasPermission("crates.admin")) return;
                 Crates.reload();
                 source.getSender().sendMessage(TextUtils.deserialize(Language.get("config_reload")));
                 break;
@@ -179,16 +180,16 @@ public class CratesCommand implements BasicCommand {
 
     @Override
     public Collection<String> suggest(CommandSourceStack source, String[] args) {
-        if(args.length <= 1 && source.getSender().hasPermission("crates.admin")) {
+        if (args.length <= 1 && source.getSender().hasPermission("crates.admin")) {
             return List.of("set", "key", "rewards", "reload", "claim");
         }
-        if(args.length <= 1) {
+        if (args.length <= 1) {
             return List.of("rewards", "claim");
         }
-        if(args.length == 2) {
+        if (args.length == 2) {
             return Crates.getCrates().keySet();
         }
-        if(args.length == 3 && source.getSender().hasPermission("crates.admin")) {
+        if (args.length == 3 && source.getSender().hasPermission("crates.admin")) {
             // list of online players
             return Bukkit.getServer().getOnlinePlayers().stream()
                     .map(Player::getName)

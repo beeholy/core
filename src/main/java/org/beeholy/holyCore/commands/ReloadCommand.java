@@ -12,7 +12,7 @@ import org.beeholy.holyCore.utility.ScoreboardHelper;
 import org.beeholy.holyCore.utility.TextUtils;
 import org.jspecify.annotations.Nullable;
 
-public class ReloadCommand implements BasicCommand{
+public class ReloadCommand implements BasicCommand {
 
     @Override
     public void execute(CommandSourceStack commandSourceStack, String[] strings) {

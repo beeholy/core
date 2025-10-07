@@ -2,7 +2,6 @@ package org.beeholy.holyCore.utility;
 
 import io.papermc.paper.plugin.lifecycle.event.LifecycleEventManager;
 import io.papermc.paper.plugin.lifecycle.event.types.LifecycleEvents;
-import it.unimi.dsi.fastutil.Hash;
 import org.beeholy.holyCore.HolyCore;
 import org.beeholy.holyCore.commands.*;
 import org.beeholy.holyCore.commands.chat.ColorCommand;
@@ -14,16 +13,15 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.Plugin;
 
 import java.io.File;
-import java.util.HashMap;
 
 public class Commands {
 
-    public static void registerCommands(Plugin plugin){
+    public static void registerCommands(Plugin plugin) {
         LifecycleEventManager<Plugin> manager = plugin.getLifecycleManager();
 
         // Get commands from commands.yml file
         File commandsFile = new File(HolyCore.getInstance().getDataFolder(), "commands.yml");
-        if(!commandsFile.exists()) {
+        if (!commandsFile.exists()) {
             commandsFile.getParentFile().mkdirs();
             HolyCore.getInstance().saveResource("commands.yml", false);
         }
@@ -51,12 +49,12 @@ public class Commands {
             commands.register(modCommands.muteCommand);
             commands.register(modCommands.statCommand);
 
-            for(String command : commandsConfig.getKeys(false)){
+            for (String command : commandsConfig.getKeys(false)) {
                 String permission = commandsConfig.getString(command + ".permission");
                 String description = commandsConfig.getString(command + ".desc");
-                String exe =  commandsConfig.getString(command + ".run");
-                if(permission == null){
-                      commands.register(command, description, new AliasCommand(command, exe, ""));
+                String exe = commandsConfig.getString(command + ".run");
+                if (permission == null) {
+                    commands.register(command, description, new AliasCommand(command, exe, ""));
                 } else {
                     commands.register(command, description, new AliasCommand(command, exe, permission));
                 }

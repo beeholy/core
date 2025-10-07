@@ -16,11 +16,15 @@ public final class BigChest {
 
     private static final BigChest instance = new BigChest();
     private final Map<UUID, Map<String, Integer>> playerChests = new HashMap<>();
-    private NamespacedKey key = new NamespacedKey(HolyCore.getInstance(), "player-big-chest");
-    private Gson gson = new Gson();
+    private final NamespacedKey key = new NamespacedKey(HolyCore.getInstance(), "player-big-chest");
+    private final Gson gson = new Gson();
 
     public BigChest() {
 
+    }
+
+    public static BigChest getInstance() {
+        return instance;
     }
 
     public void add(Player player, ItemStack itemStack) {
@@ -169,9 +173,5 @@ public final class BigChest {
             return returnString.toString();
         }
         return "No items in chest!";
-    }
-
-    public static BigChest getInstance() {
-        return instance;
     }
 }

@@ -1,8 +1,6 @@
 package org.beeholy.holyCore.economy;
 
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.event.ClickEvent;
-import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.title.Title;
 import org.beeholy.holyCore.HolyCore;
 import org.beeholy.holyCore.utility.Language;
@@ -20,32 +18,33 @@ import java.util.regex.Pattern;
 
 public class FlyTime {
 
+    private static final HolyCore plugin = HolyCore.getInstance();
     private static HashMap<String, Integer> balances;
     private static File file;
     private static FileConfiguration config;
-    private static final HolyCore plugin = HolyCore.getInstance();
 
-    public static void setup () {
+    public static void setup() {
 
         file = new File(HolyCore.getInstance().getDataFolder(), "flytime.yml");
         balances = new HashMap<>();
 
-        if(!file.exists()) {
+        if (!file.exists()) {
             file.getParentFile().mkdirs();
             plugin.saveResource("flytime.yml", false);
         }
 
         config = YamlConfiguration.loadConfiguration(file);
 
-        for(String key : config.getKeys(false)){
+        for (String key : config.getKeys(false)) {
             Integer value = config.getInt(key);
             if (value != null) {
                 balances.put(key, value);
             }
         }
     }
-    public static boolean addPlayer(String uuid){
-        if(config.get(uuid) == null){
+
+    public static boolean addPlayer(String uuid) {
+        if (config.get(uuid) == null) {
             config.set(uuid, 0);
             save();
             plugin.getLogger().info("Added new player flytime uuid: " + uuid);
@@ -62,10 +61,10 @@ public class FlyTime {
         }
     }
 
-    public static boolean give(Player player, int amount){
+    public static boolean give(Player player, int amount) {
         String uuid = player.getUniqueId().toString();
         Integer balance = config.getInt(uuid);
-        if(balance != null){
+        if (balance != null) {
             config.set(uuid, balance + amount);
             save();
             player.sendMessage(TextUtils.deserialize(Language.get("fly_received"), formatSeconds(amount)));
@@ -74,11 +73,11 @@ public class FlyTime {
         return false;
     }
 
-    public static boolean take(Player player, int amount){
+    public static boolean take(Player player, int amount) {
         String uuid = player.getUniqueId().toString();
         Integer balance = config.getInt(uuid);
-        if(balance != null){
-            if(balance <= amount) {
+        if (balance != null) {
+            if (balance <= amount) {
                 config.set(uuid, 0);
             } else {
                 config.set(uuid, balance - amount);
@@ -88,34 +87,36 @@ public class FlyTime {
         }
         return false;
     }
+
     public static boolean pay(Player from, Player to, String timeString) {
-        if(from == to) return false;
+        if (from == to) return false;
         String uuidFrom = from.getUniqueId().toString();
         int balanceFrom = config.getInt(uuidFrom);
         int amount = parseTime(timeString);
 
-        if(amount == -1) return false;
+        if (amount == -1) return false;
 
-        if(balanceFrom >= amount){
+        if (balanceFrom >= amount) {
             to.sendMessage(TextUtils.deserialize(Language.get("fly_received_from"), from.getName()));
             return take(from, amount) && give(to, amount);
         }
         return false;
     }
 
-    public static boolean set(Player player, int amount){
+    public static boolean set(Player player, int amount) {
         String uuid = player.getUniqueId().toString();
         Integer balance = config.getInt(uuid);
-        if(balance != null){
+        if (balance != null) {
             config.set(uuid, amount);
             save();
             return true;
         }
         return false;
     }
+
     public static Integer get(OfflinePlayer player) {
         Integer balance = config.getInt(player.getUniqueId().toString());
-        if(balance != null)
+        if (balance != null)
             return balance;
         return -1;
     }
@@ -129,18 +130,19 @@ public class FlyTime {
 
         player.showTitle(title);
     }
+
     public static void tick(Player player) {
         // check for perm fly.unlimited
-        if(player.hasPermission("fly.unlimited")) return;
-        if(player.getAllowFlight()){
-            if(get(player) == 0) {
+        if (player.hasPermission("fly.unlimited")) return;
+        if (player.getAllowFlight()) {
+            if (get(player) == 0) {
                 player.setAllowFlight(false);
             }
-            if(get(player) == 10 || get(player) == 30 || get(player) == 300) {
+            if (get(player) == 10 || get(player) == 30 || get(player) == 300) {
                 // 10 second warning
                 showTitle(player);
             }
-            player.sendActionBar(TextUtils.deserializeAsPlayer(Language.get("flytime_action_bar"),  player));
+            player.sendActionBar(TextUtils.deserializeAsPlayer(Language.get("flytime_action_bar"), player));
             take(player, 1);
         }
     }
@@ -153,7 +155,7 @@ public class FlyTime {
         int seconds = totalSeconds % 60;
 
         StringBuilder sb = new StringBuilder();
-        if(days > 0) sb.append(days).append("d");
+        if (days > 0) sb.append(days).append("d");
         if (hours > 0) sb.append(hours).append("h");
         if (minutes > 0) sb.append(minutes).append("m");
         if (seconds > 0 || sb.length() == 0) sb.append(seconds).append("s");
@@ -181,10 +183,18 @@ public class FlyTime {
                 found = true;
                 int value = Integer.parseInt(matcher.group(1));
                 switch (matcher.group(2)) {
-                    case "d": totalSeconds += value * 86400; break;
-                    case "h": totalSeconds += value * 3600; break;
-                    case "m": totalSeconds += value * 60; break;
-                    case "s": totalSeconds += value; break;
+                    case "d":
+                        totalSeconds += value * 86400;
+                        break;
+                    case "h":
+                        totalSeconds += value * 3600;
+                        break;
+                    case "m":
+                        totalSeconds += value * 60;
+                        break;
+                    case "s":
+                        totalSeconds += value;
+                        break;
                     default:
                         return -1;
                 }

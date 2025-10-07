@@ -3,7 +3,6 @@ package org.beeholy.holyCore.items;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.beeholy.holyCore.HolyCore;
-import org.beeholy.holyCore.gui.PaginatedMenu;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -19,7 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Vouchers {
-    private static MiniMessage mm = MiniMessage.miniMessage();
+    private static final MiniMessage mm = MiniMessage.miniMessage();
 
     private static File vouchersFile;
     private static FileConfiguration vouchersConfig;
@@ -47,28 +46,36 @@ public class Vouchers {
         vouchersConfig = YamlConfiguration.loadConfiguration(vouchersFile);
         vouchers.addAll(vouchersConfig.getKeys(false));
     }
-    public static String getPermission(String name){
+
+    public static String getPermission(String name) {
         return vouchersConfig.getString(name + ".permission");
     }
-    public static String getCommand(String name){
+
+    public static String getCommand(String name) {
         return vouchersConfig.getString(name + ".command");
     }
-    public static List<String> getLore(String name){
+
+    public static List<String> getLore(String name) {
         return (List<String>) vouchersConfig.getList(name + ".lore");
     }
-    public static String getCustomModel(String name){
+
+    public static String getCustomModel(String name) {
         return vouchersConfig.getString(name + ".custom_model");
     }
-    public static String getSuccessMessage(String name){
+
+    public static String getSuccessMessage(String name) {
         return vouchersConfig.getString(name + ".success_message");
     }
-    public static List<String> getVouchers(){
+
+    public static List<String> getVouchers() {
         return vouchers;
     }
-    public static boolean hasVoucher(String name){
+
+    public static boolean hasVoucher(String name) {
         return vouchersConfig.getKeys(false).contains(name);
     }
-    public static ItemStack getItemStack(String name){
+
+    public static ItemStack getItemStack(String name) {
         ItemStack item = ItemStack.of(Material.NAME_TAG);
         ItemMeta meta = item.getItemMeta();
         meta.displayName(mm.deserialize("<italic:false>" + vouchersConfig.getString(name + ".name") + "</italic>"));
@@ -81,7 +88,7 @@ public class Vouchers {
         }
 
         meta.lore(styledLore);
-        if(getCustomModel(name) != null) {
+        if (getCustomModel(name) != null) {
             CustomModelDataComponent customModel = meta.getCustomModelDataComponent();
             customModel.setStrings(List.of(getCustomModel(name)));
             meta.setCustomModelDataComponent(customModel);
@@ -90,7 +97,7 @@ public class Vouchers {
         meta.getPersistentDataContainer().set(key, PersistentDataType.STRING, name);
         item.setItemMeta(meta);
 
-        if(vouchersConfig.getInt(name + ".stack_size", -1) != -1){
+        if (vouchersConfig.getInt(name + ".stack_size", -1) != -1) {
             item.setAmount(vouchersConfig.getInt(name + ".stack_size"));
         }
         return item;

@@ -3,9 +3,8 @@ package org.beeholy.holyCore.commands.chat;
 import io.papermc.paper.command.brigadier.BasicCommand;
 import io.papermc.paper.command.brigadier.CommandSourceStack;
 import net.kyori.adventure.text.minimessage.MiniMessage;
-import org.beeholy.holyCore.chat.Gradients;
-import org.beeholy.holyCore.gui.PermissionMenu;
 import org.beeholy.holyCore.chat.Tags;
+import org.beeholy.holyCore.gui.PermissionMenu;
 import org.beeholy.holyCore.utility.TextUtils;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -24,63 +23,62 @@ public class TagCommand implements BasicCommand {
             return;
         }
 
-        Player player = (Player) sender;
-
         if (args.length == 0) {
             PermissionMenu menu = new PermissionMenu(
                     TextUtils.deserialize("Tags"),
                     "tag",
                     "tag_name",
-                    player,
+                    pp,
                     "<tags:<data>/>");
-            player.openInventory(menu.getInventory());
+            pp.openInventory(menu.getInventory());
             return;
         }
 
         switch (args[0].toLowerCase()) {
             case "reload":
-                if(player.isOp()) {
-                    player.sendMessage("Tags config reloaded");
+                if (pp.isOp()) {
+                    pp.sendMessage("Tags config reloaded");
                     Tags.reload();
                 } else {
-                    player.sendMessage("You have insufficient permissions.");
+                    pp.sendMessage("You have insufficient permissions.");
                 }
                 break;
             case "set":
                 if (args.length < 2) {
-                    player.sendMessage("Usage: /tag set <tagName>");
+                    pp.sendMessage("Usage: /tag set <tagName>");
                     break;
                 }
                 String tagName = args[1];
-                if (player.hasPermission("tag." + tagName)) {
-                    boolean success = Tags.setPlayerTag(player, tagName);
+                if (pp.hasPermission("tag." + tagName)) {
+                    boolean success = Tags.setPlayerTag(pp, tagName);
                     if (success) {
-                        player.sendMessage("Tag set to: " + tagName);
+                        pp.sendMessage("Tag set to: " + tagName);
                     } else {
-                        player.sendMessage("Tag not found.");
+                        pp.sendMessage("Tag not found.");
                     }
                 } else {
-                    player.sendMessage("You don't have permission for this tag.");
+                    pp.sendMessage("You don't have permission for this tag.");
                 }
                 break;
 
             case "clear":
-                boolean hadTag = Tags.setPlayerTag(player, "");
+                boolean hadTag = Tags.setPlayerTag(pp, "");
                 if (hadTag) {
-                    player.sendMessage("Your tag has been cleared.");
+                    pp.sendMessage("Your tag has been cleared.");
                 } else {
-                    player.sendMessage("You had no tag to clear.");
+                    pp.sendMessage("You had no tag to clear.");
                 }
                 break;
 
             default:
-                player.sendMessage("Unknown subcommand.");
+                pp.sendMessage("Unknown subcommand.");
         }
     }
+
     @Override
-    public List<String> suggest(CommandSourceStack source, String[] args){
+    public List<String> suggest(CommandSourceStack source, String[] args) {
         if (args.length == 0 || args.length == 1) {
-            if(source.getSender().isOp()) {
+            if (source.getSender().isOp()) {
                 return List.of("set", "clear", "reload");
             }
             return List.of("set", "clear");

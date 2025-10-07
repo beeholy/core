@@ -1,9 +1,6 @@
 package org.beeholy.holyCore.chat;
 
-import net.luckperms.api.LuckPerms;
-import net.luckperms.api.model.user.User;
 import org.beeholy.holyCore.HolyCore;
-import org.beeholy.holyCore.hooks.LPHook;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
 import org.bukkit.persistence.PersistentDataType;
@@ -12,15 +9,16 @@ import java.util.List;
 
 public class PlayerData {
     public static boolean setString(Player player, String key, String value) {
-        if(player == null) return false;
-        if(key == null || key.isEmpty()) return false;
+        if (player == null) return false;
+        if (key == null || key.isEmpty()) return false;
         NamespacedKey namespacedKey = new NamespacedKey(HolyCore.getInstance(), key);
         player.getPersistentDataContainer().set(namespacedKey, PersistentDataType.STRING, value);
         return true;
     }
+
     public static String getString(Player player, String key) {
-        if(player == null) return null;
-        if(key == null || key.isEmpty()) return null;
+        if (player == null) return null;
+        if (key == null || key.isEmpty()) return null;
         NamespacedKey namespacedKey = new NamespacedKey(HolyCore.getInstance(), key);
         return player.getPersistentDataContainer().get(namespacedKey, PersistentDataType.STRING);
     }

@@ -8,7 +8,7 @@ import java.util.List;
 
 public class RewardsMenu extends PaginatedMenu<Reward> {
 
-    public RewardsMenu(Component title, int size, List<Reward> rewards){
+    public RewardsMenu(Component title, int size, List<Reward> rewards) {
         super(title, size, rewards);
     }
 

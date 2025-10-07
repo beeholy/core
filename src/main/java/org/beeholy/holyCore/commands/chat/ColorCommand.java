@@ -23,62 +23,61 @@ public class ColorCommand implements BasicCommand {
             return;
         }
 
-        Player player = (Player) sender;
-
         if (args.length == 0) {
             PermissionMenu menu = new PermissionMenu(
                     TextUtils.deserialize("Chat Colors"),
-                    "color","color_name",
-                    player,
+                    "color", "color_name",
+                    pp,
                     "<colors:<data>><data></colors>");
-            player.openInventory(menu.getInventory());
+            pp.openInventory(menu.getInventory());
             return;
         }
 
         switch (args[0].toLowerCase()) {
             case "reload":
-                if(player.isOp()) {
-                    player.sendMessage("Chat colors config reloaded");
+                if (pp.isOp()) {
+                    pp.sendMessage("Chat colors config reloaded");
                     Colors.reload();
                 } else {
-                    player.sendMessage("Insufficent permissions");
+                    pp.sendMessage("Insufficent permissions");
                 }
                 break;
             case "set":
                 if (args.length < 2) {
-                    player.sendMessage("Usage: /color set <name>");
+                    pp.sendMessage("Usage: /color set <name>");
                     break;
                 }
                 String colorName = args[1];
-                if (player.hasPermission("color." + colorName)) {
-                    boolean success = Colors.setPlayerColor(player, colorName);
+                if (pp.hasPermission("color." + colorName)) {
+                    boolean success = Colors.setPlayerColor(pp, colorName);
                     if (success) {
-                        player.sendMessage("Chat color set to: " + colorName);
+                        pp.sendMessage("Chat color set to: " + colorName);
                     } else {
-                        player.sendMessage("Chat color not found.");
+                        pp.sendMessage("Chat color not found.");
                     }
                 } else {
-                    player.sendMessage("You don't have permission for this chat color.");
+                    pp.sendMessage("You don't have permission for this chat color.");
                 }
                 break;
 
             case "clear":
-                boolean hadTag = Colors.setPlayerColor(player, "");
+                boolean hadTag = Colors.setPlayerColor(pp, "");
                 if (hadTag) {
-                    player.sendMessage("Your chat color has been cleared.");
+                    pp.sendMessage("Your chat color has been cleared.");
                 } else {
-                    player.sendMessage("You had no chat color to clear.");
+                    pp.sendMessage("You had no chat color to clear.");
                 }
                 break;
 
             default:
-                player.sendMessage("Unknown subcommand.");
+                pp.sendMessage("Unknown subcommand.");
         }
     }
+
     @Override
-    public List<String> suggest(CommandSourceStack source, String[] args){
+    public List<String> suggest(CommandSourceStack source, String[] args) {
         if (args.length == 0 || args.length == 1) {
-            if(source.getSender().isOp()) {
+            if (source.getSender().isOp()) {
                 return List.of("set", "clear", "reload");
             }
             return List.of("set", "clear");

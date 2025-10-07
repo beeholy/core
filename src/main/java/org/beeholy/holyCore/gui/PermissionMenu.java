@@ -20,10 +20,10 @@ import org.bukkit.persistence.PersistentDataType;
 import java.util.List;
 
 public class PermissionMenu extends PaginatedMenu<String> {
-    private NamespacedKey key;
-    private String permission;
-    private Player player;
-    private String displayName;
+    private final NamespacedKey key;
+    private final String permission;
+    private final Player player;
+    private final String displayName;
 
     public PermissionMenu(Component title, String permission, String key, Player player, String displayName) {
         super(title, 27, List.of());
@@ -33,17 +33,17 @@ public class PermissionMenu extends PaginatedMenu<String> {
         this.displayName = displayName;
         var items = PlayerData.getPlayerPermissionList(player, permission);
 
-        switch(permission){
+        switch (permission) {
             case "color":
-                if(player.hasPermission("colors.all"))
+                if (player.hasPermission("colors.all"))
                     items = Colors.getColors();
                 break;
             case "gradient":
-                if(player.hasPermission("gradients.all"))
+                if (player.hasPermission("gradients.all"))
                     items = Gradients.getGradients();
                 break;
             case "tag":
-                if(player.hasPermission("tags.all"))
+                if (player.hasPermission("tags.all"))
                     items = Tags.getTags();
                 break;
         }

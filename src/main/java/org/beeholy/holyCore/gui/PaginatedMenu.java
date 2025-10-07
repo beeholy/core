@@ -1,7 +1,6 @@
 package org.beeholy.holyCore.gui;
 
 import net.kyori.adventure.text.Component;
-import org.beeholy.holyCore.HolyCore;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -13,12 +12,23 @@ import java.util.List;
 
 public abstract class PaginatedMenu<T> extends Menu {
 
-    protected List<T> items;
-    protected int page;
     protected final int pageSize;
     protected final int nextIndex;
     protected final int previousIndex;
     protected final int closeIndex;
+    protected List<T> items;
+    protected int page;
+
+    public PaginatedMenu(Component title, int size, List<T> items) {
+        super(title, size);
+        this.items = items;
+        this.pageSize = size - 9;
+        this.page = 0;
+        this.nextIndex = pageSize + 5;
+        this.previousIndex = pageSize + 3;
+        this.closeIndex = pageSize + 4;
+        updateInventory();
+    }
 
     @Override
     public void handleClick(InventoryClickEvent event) {
@@ -36,16 +46,6 @@ public abstract class PaginatedMenu<T> extends Menu {
         }
     }
 
-    public PaginatedMenu(Component title, int size, List<T> items) {
-        super(title, size);
-        this.items = items;
-        this.pageSize = size - 9;
-        this.page = 0;
-        this.nextIndex = pageSize + 5;
-        this.previousIndex = pageSize + 3;
-        this.closeIndex = pageSize + 4;
-        updateInventory();
-    }
     /**
      * Implement this method to generate the display item for a specific data entry
      */
@@ -101,8 +101,16 @@ public abstract class PaginatedMenu<T> extends Menu {
         }
     }
 
-    public int getNextIndex() { return nextIndex; }
-    public int getPreviousIndex() { return previousIndex; }
-    public int getCloseIndex() { return closeIndex; }
+    public int getNextIndex() {
+        return nextIndex;
+    }
+
+    public int getPreviousIndex() {
+        return previousIndex;
+    }
+
+    public int getCloseIndex() {
+        return closeIndex;
+    }
 
 }

@@ -8,24 +8,17 @@ import io.papermc.paper.registry.TypedKey;
 import io.papermc.paper.registry.data.EnchantmentRegistryEntry;
 import io.papermc.paper.registry.event.RegistryEvents;
 import io.papermc.paper.registry.keys.EnchantmentKeys;
-import io.papermc.paper.registry.keys.tags.EnchantmentTagKeys;
 import io.papermc.paper.registry.keys.tags.ItemTypeTagKeys;
-import io.papermc.paper.registry.set.RegistryKeySet;
 import io.papermc.paper.registry.tag.TagKey;
 import io.papermc.paper.tag.PostFlattenTagRegistrar;
 import io.papermc.paper.tag.TagEntry;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.Component;
-import org.bukkit.Tag;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.EquipmentSlotGroup;
 import org.bukkit.inventory.ItemType;
 
 import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-import java.util.stream.StreamSupport;
 
 public class Bootstrap implements PluginBootstrap {
 

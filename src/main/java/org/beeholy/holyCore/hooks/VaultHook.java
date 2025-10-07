@@ -13,6 +13,14 @@ public final class VaultHook {
     private static Permission permissions = null;
     private static Chat chat = null;
 
+    static {
+        if (Bukkit.getPluginManager().getPlugin("Vault") != null) {
+            setupEconomy();
+            setupChat();
+            setupPermissions();
+        }
+    }
+
     private VaultHook() {
     }
 
@@ -27,14 +35,14 @@ public final class VaultHook {
         RegisteredServiceProvider<Chat> rsp = Bukkit.getServicesManager().getRegistration(Chat.class);
 
         if (rsp != null)
-        	chat = rsp.getProvider();
+            chat = rsp.getProvider();
     }
 
     private static void setupPermissions() {
         RegisteredServiceProvider<Permission> rsp = Bukkit.getServicesManager().getRegistration(Permission.class);
 
         if (rsp != null)
-        	permissions = rsp.getProvider();
+            permissions = rsp.getProvider();
     }
 
     public static boolean hasEconomy() {
@@ -69,19 +77,12 @@ public final class VaultHook {
         return economy.format(amount);
         //return amount + " " + (((int) amount) == 1 ? economy.currencyNameSingular() : economy.currencyNamePlural());
     }
+
     public static Permission getPermissions() {
         return permissions;
     }
 
     public static Chat getChat() {
-      return chat;
-    }
-
-    static {
-        if (Bukkit.getPluginManager().getPlugin("Vault") != null) {
-            setupEconomy();
-            setupChat();
-            setupPermissions();
-        }
+        return chat;
     }
 }

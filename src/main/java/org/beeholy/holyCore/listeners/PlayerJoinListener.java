@@ -1,23 +1,18 @@
 package org.beeholy.holyCore.listeners;
 
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.minimessage.MiniMessage;
-import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import org.beeholy.holyCore.HolyCore;
-import org.beeholy.holyCore.hooks.VaultHook;
-import org.beeholy.holyCore.utility.*;
 import org.beeholy.holyCore.economy.FlyTime;
-import org.beeholy.holyCore.chat.Gradients;
+import org.beeholy.holyCore.utility.*;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 
-public class PlayerJoinListener implements Listener
-{
-    private MiniMessage mm = MiniMessage.miniMessage();
+public class PlayerJoinListener implements Listener {
+    private final MiniMessage mm = MiniMessage.miniMessage();
 
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {
@@ -30,7 +25,7 @@ public class PlayerJoinListener implements Listener
             String messageString = Language.get("welcome_message");
             // Add to users table in database if not joined before
             Boolean firstJoin = DatabaseManager.getInstance().createUser(event.getPlayer().getName(), event.getPlayer().getUniqueId());
-            if(firstJoin)
+            if (firstJoin)
                 messageString = Language.get("first_join_message");
 
             Component message = TextUtils.deserializeAsPlayer(messageString, player);
@@ -39,7 +34,7 @@ public class PlayerJoinListener implements Listener
 
         // Set up scoreboard
         ScoreboardHelper helper = ScoreboardHelper.createScore(player);
-        helper.updateScoreboard(player);
+        ScoreboardHelper.updateScoreboard(player);
 
         Tablist.send(player);
 

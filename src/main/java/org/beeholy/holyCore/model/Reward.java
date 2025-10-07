@@ -7,7 +7,6 @@ import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.components.CustomModelDataComponent;
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,7 +27,7 @@ public class Reward {
         ItemMeta meta = this.item.getItemMeta();
         meta.displayName(TextUtils.deserialize(name).decorationIfAbsent(TextDecoration.ITALIC, TextDecoration.State.FALSE));
         List<Component> deserializedLore = new ArrayList<>();
-        for( String line : lore) {
+        for (String line : lore) {
             deserializedLore.add(TextUtils.deserialize(line).decorationIfAbsent(TextDecoration.ITALIC, TextDecoration.State.FALSE));
         }
         meta.lore(deserializedLore);

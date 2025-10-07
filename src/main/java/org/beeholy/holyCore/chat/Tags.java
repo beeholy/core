@@ -14,9 +14,8 @@ import java.util.List;
 
 public class Tags {
 
-    private static HashMap<String, String> tags;
     private static final Tags instance = new Tags();
-
+    private static HashMap<String, String> tags;
     private static File tagsFile;
     private static FileConfiguration tagsConfig;
 
@@ -24,7 +23,7 @@ public class Tags {
 
     }
 
-    public static void setup(){
+    public static void setup() {
         JavaPlugin plugin = HolyCore.getInstance();
         tags = new HashMap<>();
         tagsFile = new File(plugin.getDataFolder(), "tags.yml");
@@ -43,6 +42,7 @@ public class Tags {
             }
         }
     }
+
     public static void reload() {
         tags.clear(); // Clear old tags
         tagsConfig = YamlConfiguration.loadConfiguration(tagsFile);
@@ -55,20 +55,20 @@ public class Tags {
         }
     }
 
-    public static String getTag(String name){
+    public static String getTag(String name) {
         return tags.getOrDefault(name, "");
     }
 
     // getTagNames
-    public static List<String> getTagNames(){
+    public static List<String> getTagNames() {
         return new java.util.ArrayList<>(tags.keySet());
     }
 
-    public static List<String> getTags(){
+    public static List<String> getTags() {
         return new java.util.ArrayList<>(tags.keySet());
     }
 
-    public static List<String> getPlayerTags(Player user){
+    public static List<String> getPlayerTags(Player user) {
         // check player permissions for tag.<name> and make sure its in config, return list of tag names
         List<String> playerTags = new java.util.ArrayList<>();
 
@@ -80,6 +80,7 @@ public class Tags {
 
         return playerTags;
     }
+
     public static boolean setPlayerTag(Player player, String tagName) {
         if (tags.containsKey(tagName) || tagName.isEmpty()) {
             PlayerData.setString(player, "tag_name", tagName);
@@ -91,11 +92,12 @@ public class Tags {
 
     public static String getPlayerTag(Player player) {
         NamespacedKey key = new NamespacedKey(HolyCore.getInstance(), "tag_name");
-        String tagName =  player.getPersistentDataContainer().get(key, PersistentDataType.STRING);
+        String tagName = player.getPersistentDataContainer().get(key, PersistentDataType.STRING);
         String tag = getTag(tagName);
         return tagName != null ? tag : "";
     }
-    public static Tags getInstance(){
+
+    public static Tags getInstance() {
         return instance;
     }
 }

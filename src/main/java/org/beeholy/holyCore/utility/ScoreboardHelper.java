@@ -4,7 +4,6 @@ import io.papermc.paper.scoreboard.numbers.NumberFormat;
 import me.clip.placeholderapi.PlaceholderAPI;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.beeholy.holyCore.HolyCore;
-import org.beeholy.holyCore.hooks.VaultHook;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -25,11 +24,33 @@ import java.util.UUID;
  */
 public class ScoreboardHelper {
 
-    private static HashMap<UUID, ScoreboardHelper> players = new HashMap<>();
+    private static final HashMap<UUID, ScoreboardHelper> players = new HashMap<>();
     private static String title;
     private static List<String> slots;
 
-    public static void reload(){
+    static {
+        reload();
+    }
+
+    private final Scoreboard scoreboard;
+    private final Objective sidebar;
+    private final MiniMessage mm = MiniMessage.miniMessage();
+
+    private ScoreboardHelper(Player player) {
+        scoreboard = Bukkit.getScoreboardManager().getNewScoreboard();
+        sidebar = scoreboard.registerNewObjective("sidebar", "dummy");
+        sidebar.setDisplaySlot(DisplaySlot.SIDEBAR);
+        sidebar.numberFormat(NumberFormat.blank());
+        // Create Teams
+        for (int i = 1; i <= 15; i++) {
+            Team team = scoreboard.registerNewTeam("SLOT_" + i);
+            team.addEntry(genEntry(i));
+        }
+        player.setScoreboard(scoreboard);
+        players.put(player.getUniqueId(), this);
+    }
+
+    public static void reload() {
         File scoreboardFile;
         FileConfiguration scoreboardConfig;
         HolyCore plugin = HolyCore.getInstance();
@@ -45,10 +66,6 @@ public class ScoreboardHelper {
         // From config, load into static hashmap
         title = scoreboardConfig.getString("title");
         slots = scoreboardConfig.getStringList("slots");
-    }
-
-    static {
-        reload();
     }
 
     public static boolean hasScore(Player player) {
@@ -67,22 +84,14 @@ public class ScoreboardHelper {
         return players.remove(player.getUniqueId());
     }
 
-    private Scoreboard scoreboard;
-    private Objective sidebar;
-    private MiniMessage mm = MiniMessage.miniMessage();
-
-    private ScoreboardHelper(Player player) {
-        scoreboard = Bukkit.getScoreboardManager().getNewScoreboard();
-        sidebar = scoreboard.registerNewObjective("sidebar", "dummy");
-        sidebar.setDisplaySlot(DisplaySlot.SIDEBAR);
-        sidebar.numberFormat(NumberFormat.blank());
-        // Create Teams
-        for (int i = 1; i <= 15; i++) {
-            Team team = scoreboard.registerNewTeam("SLOT_" + i);
-            team.addEntry(genEntry(i));
+    public static void updateScoreboard(Player player) {
+        if (hasScore(player)) {
+            ScoreboardHelper helper = getByPlayer(player);
+            helper.setTitle(PlaceholderAPI.setPlaceholders(player, title));
+            for (int i = 0; i < slots.size(); i++) {
+                helper.setSlot(15 - i, PlaceholderAPI.setPlaceholders(player, slots.get(i)));
+            }
         }
-        player.setScoreboard(scoreboard);
-        players.put(player.getUniqueId(), this);
     }
 
     public void setTitle(String title) {
@@ -103,15 +112,6 @@ public class ScoreboardHelper {
         String entry = genEntry(slot);
         if (scoreboard.getEntries().contains(entry)) {
             scoreboard.resetScores(entry);
-        }
-    }
-    public static void updateScoreboard(Player player) {
-        if (hasScore(player)) {
-            ScoreboardHelper helper = getByPlayer(player);
-            helper.setTitle(PlaceholderAPI.setPlaceholders(player, title));
-            for(int i = 0; i < slots.size(); i++) {
-                helper.setSlot(15 - i, PlaceholderAPI.setPlaceholders(player, slots.get(i)));
-            }
         }
     }
 

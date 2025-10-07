@@ -14,9 +14,8 @@ import java.util.List;
 
 public class Colors {
 
-    private static HashMap<String, String> colors;
     private static final Colors instance = new Colors();
-
+    private static HashMap<String, String> colors;
     private static File colorsFile;
     private static FileConfiguration colorsConfig;
 
@@ -24,13 +23,13 @@ public class Colors {
 
     }
 
-    public static void setup(){
+    public static void setup() {
         JavaPlugin plugin = HolyCore.getInstance();
         colors = new HashMap<>();
         colorsFile = new File(plugin.getDataFolder(), "colors.yml");
 
-        if (!colorsFile .exists()) {
-            colorsFile .getParentFile().mkdirs();
+        if (!colorsFile.exists()) {
+            colorsFile.getParentFile().mkdirs();
             plugin.saveResource("colors.yml", false); // copies from jar if present
         }
 
@@ -43,6 +42,7 @@ public class Colors {
             }
         }
     }
+
     public static void reload() {
         colors.clear(); // Clear old tags
         colorsConfig = YamlConfiguration.loadConfiguration(colorsFile);
@@ -55,11 +55,11 @@ public class Colors {
         }
     }
 
-    public static String getColor(String name){
+    public static String getColor(String name) {
         return colors.getOrDefault(name, "#FFFFFF");
     }
 
-    public static List<String> getPlayerColors(Player user){
+    public static List<String> getPlayerColors(Player user) {
         // check player permissions for tag.<name> and make sure its in config, return list of tag names
         List<String> playerColors = new java.util.ArrayList<>();
 
@@ -72,7 +72,7 @@ public class Colors {
         return playerColors;
     }
 
-    public static List<String> getColors(){
+    public static List<String> getColors() {
         List<String> allColors = new java.util.ArrayList<>();
         for (String key : colors.keySet()) {
             allColors.add(key);
@@ -91,11 +91,12 @@ public class Colors {
 
     public static String getPlayerColor(Player player) {
         NamespacedKey key = new NamespacedKey(HolyCore.getInstance(), "color_name");
-        String colorName =  player.getPersistentDataContainer().get(key, PersistentDataType.STRING);
+        String colorName = player.getPersistentDataContainer().get(key, PersistentDataType.STRING);
         String color = getColor(colorName);
         return colorName != null ? color : "#FFFFFF";
     }
-    public static Colors getInstance(){
+
+    public static Colors getInstance() {
         return instance;
     }
 }

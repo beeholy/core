@@ -9,19 +9,19 @@ import org.jspecify.annotations.Nullable;
 
 public class AliasCommand implements BasicCommand {
 
-    private String command;
-    private String exe;
-    private String permission;
+    private final String command;
+    private final String exe;
+    private final String permission;
 
-    public AliasCommand(String command, String exe, String permission){
-       this.permission = permission;
-       this.command = command;
-       this.exe = exe;
+    public AliasCommand(String command, String exe, String permission) {
+        this.permission = permission;
+        this.command = command;
+        this.exe = exe;
     }
 
     @Override
     public void execute(CommandSourceStack source, String[] args) {
-        if(!(source.getSender() instanceof Player player)){
+        if (!(source.getSender() instanceof Player player)) {
             source.getSender().sendMessage("Command can only be ran by players");
             return;
         }

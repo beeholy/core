@@ -10,7 +10,6 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
@@ -30,21 +29,21 @@ public class VoucherListeners implements Listener {
         ItemStack activeItem = player.getInventory().getItemInMainHand();
         ItemMeta itemMeta = activeItem.getItemMeta();
 
-        if(itemMeta == null) return;
+        if (itemMeta == null) return;
 
         NamespacedKey key = new NamespacedKey(HolyCore.getInstance(), "voucher_name");
-        if(!(itemMeta.getPersistentDataContainer().has(key))) return;
+        if (!(itemMeta.getPersistentDataContainer().has(key))) return;
 
         event.setCancelled(true);
         String voucherName = itemMeta.getPersistentDataContainer().get(key, PersistentDataType.STRING);
 
-        if(Vouchers.getPermission(voucherName) != null) {
+        if (Vouchers.getPermission(voucherName) != null) {
             if (player.isPermissionSet(Vouchers.getPermission(voucherName))) {
                 player.sendMessage(TextUtils.deserialize(Language.get("perms_already_has")));
                 return;
             }
         }
-        if(Vouchers.getSuccessMessage(voucherName) != null){
+        if (Vouchers.getSuccessMessage(voucherName) != null) {
             player.sendMessage(TextUtils.deserialize(Vouchers.getSuccessMessage(voucherName)));
         }
         CommandSender console = Bukkit.getServer().getConsoleSender();
@@ -64,7 +63,7 @@ public class VoucherListeners implements Listener {
         matcher.appendTail(replacedCommand);
 
         Bukkit.getServer().dispatchCommand(console, replacedCommand.toString());
-        HolyCore.getInstance().getLogger().info("command: " +  replacedCommand.toString());
+        HolyCore.getInstance().getLogger().info("command: " + replacedCommand);
         int stackSize = activeItem.getAmount();
         activeItem.setAmount(stackSize - 1);
     }

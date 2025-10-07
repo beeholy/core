@@ -5,14 +5,13 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.HashMap;
 
 public class Language {
+    private static final HolyCore plugin = HolyCore.getInstance();
     private static HashMap<String, String> strings;
     private static File file;
     private static FileConfiguration config;
-    private static final HolyCore plugin = HolyCore.getInstance();
 
     public static void setup() {
         file = new File(HolyCore.getInstance().getDataFolder(), "language.yml");
@@ -20,6 +19,7 @@ public class Language {
 
         reload();
     }
+
     public static void reload() {
         strings.clear();
         if (!file.exists()) {

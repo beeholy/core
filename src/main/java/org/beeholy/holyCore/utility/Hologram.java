@@ -10,15 +10,18 @@ public class Hologram {
     public static Hologram instance;
     public static HashMap<String, Hologram> holograms = new HashMap<>();
 
-    public Hologram(){
+    public Hologram() {
         instance = this;
     }
 
 
-    public void create(World world, Location location){
+    public void create(World world, Location location) {
 
     }
 
-    public void delete(){}
-    public void update(){}
+    public void delete() {
+    }
+
+    public void update() {
+    }
 }

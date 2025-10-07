@@ -26,15 +26,15 @@ public class VoucherCommand implements BasicCommand {
 //            source.getSender().sendMessage("Command can only be ran by player");
 //            return;
 //        }
-        if(args[0].isEmpty()){
+        if (args[0].isEmpty()) {
             source.getSender().sendMessage(TextUtils.deserialize(Language.get("voucher_command_usage")));
         }
         switch (args[0].toLowerCase()) {
             case "give":
                 // if args 1 is player, 2 is tag name
                 Player otherPlayer = Bukkit.getServer().getPlayerExact(args[1]);
-                if(otherPlayer != null){
-                    if(Vouchers.hasVoucher(args[2])){
+                if (otherPlayer != null) {
+                    if (Vouchers.hasVoucher(args[2])) {
                         // if has arg3 of amount set stack size
                         if (args.length == 4) {
                             int amount;
@@ -46,7 +46,7 @@ public class VoucherCommand implements BasicCommand {
                             }
                             ItemStack stack = Vouchers.getItemStack(args[2]);
                             int maxStackSize = stack.getMaxStackSize();
-                            if(amount > maxStackSize) {
+                            if (amount > maxStackSize) {
                                 source.getSender().sendMessage(TextUtils.deserialize(Language.get("max_stack_size"), Integer.toString(maxStackSize)));
                                 return;
                             }

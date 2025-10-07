@@ -14,9 +14,8 @@ import java.util.List;
 
 public class Gradients {
 
-    private static HashMap<String, String> gradients;
     private static final Gradients instance = new Gradients();
-
+    private static HashMap<String, String> gradients;
     private static File gradientsFile;
     private static FileConfiguration gradientsConfig;
 
@@ -60,7 +59,7 @@ public class Gradients {
         return gradients.getOrDefault(name, "<white>");
     }
 
-    public static List<String> getGradients(){
+    public static List<String> getGradients() {
         return new java.util.ArrayList<>(gradients.keySet());
     }
 

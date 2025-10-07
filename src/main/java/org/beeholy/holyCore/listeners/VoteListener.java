@@ -1,5 +1,7 @@
 package org.beeholy.holyCore.listeners;
 
+import com.vexsoftware.votifier.model.Vote;
+import com.vexsoftware.votifier.model.VotifierEvent;
 import org.beeholy.holyCore.HolyCore;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
@@ -7,8 +9,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import com.vexsoftware.votifier.model.VotifierEvent;
-import com.vexsoftware.votifier.model.Vote;
 
 public class VoteListener implements Listener {
 
@@ -17,7 +17,7 @@ public class VoteListener implements Listener {
         Vote vote = event.getVote();
         //HolyCore.getInstance().getLogger().info("vote: " + vote.toString());
         Player player = Bukkit.getServer().getPlayerExact(vote.getUsername());
-        if(player != null) {
+        if (player != null) {
             HolyCore.getInstance().getLogger().info("Online player voted");
             return;
         }

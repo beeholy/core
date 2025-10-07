@@ -89,7 +89,7 @@ public class FlyCommand implements BasicCommand {
                         sender.sendMessage(TextUtils.deserialize(Language.get("player_not_found")));
                     }
 
-                    });
+                });
                 return;
             }
             if (!(sender instanceof Player player)) {
@@ -101,18 +101,18 @@ public class FlyCommand implements BasicCommand {
             return;
         }
         // /fly pay
-        if(subcommand.equals("pay")){
+        if (subcommand.equals("pay")) {
             if (!(sender instanceof Player player)) {
                 sender.sendMessage("Only players can use /fly bal.");
                 return;
             }
-            if(args.length == 3){
+            if (args.length == 3) {
                 Player target = Bukkit.getServer().getPlayerExact(args[1]);
                 if (target == null) {
                     sender.sendMessage(TextUtils.deserialize(Language.get("player_not_found")));
                     return;
                 }
-                if(FlyTime.pay(player, target, args[2])){
+                if (FlyTime.pay(player, target, args[2])) {
                     sender.sendMessage(TextUtils.deserialize(Language.get("fly_paid"), target.getName(), args[2]));
                     return;
                 }
@@ -124,9 +124,9 @@ public class FlyCommand implements BasicCommand {
     @Override
     public Collection<String> suggest(CommandSourceStack source, String[] args) {
         if (args.length == 0 || args.length == 1) {
-            if(source.getSender().hasPermission("fly.admin"))
+            if (source.getSender().hasPermission("fly.admin"))
                 return List.of("give", "take", "set", "bal", "pay");
-            return(List.of("bal", "pay"));
+            return (List.of("bal", "pay"));
         }
         if (args.length == 2) {
             return Bukkit.getServer().getOnlinePlayers().stream()

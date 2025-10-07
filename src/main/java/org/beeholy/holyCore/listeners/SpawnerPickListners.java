@@ -42,7 +42,7 @@ public class SpawnerPickListners implements Listener {
         if (meta != null) {
             NamespacedKey typeKey = new NamespacedKey(HolyCore.getInstance(), "spawner_type");
             meta.getPersistentDataContainer().set(typeKey, PersistentDataType.STRING, type.name());
-            meta.displayName(TextUtils.deserialize("<italic:false><gold>" + type.name().substring(0,1) + type.name().substring(1).toLowerCase() + " Spawner</gold>"));
+            meta.displayName(TextUtils.deserialize("<italic:false><gold>" + type.name().charAt(0) + type.name().substring(1).toLowerCase() + " Spawner</gold>"));
             spawnerItem.setItemMeta(meta);
         }
 

@@ -3,7 +3,6 @@ package org.beeholy.holyCore.commands.chat;
 import io.papermc.paper.command.brigadier.BasicCommand;
 import io.papermc.paper.command.brigadier.CommandSourceStack;
 import net.kyori.adventure.text.minimessage.MiniMessage;
-import org.beeholy.holyCore.chat.Colors;
 import org.beeholy.holyCore.chat.Gradients;
 import org.beeholy.holyCore.gui.PermissionMenu;
 import org.beeholy.holyCore.utility.TextUtils;
@@ -24,63 +23,62 @@ public class GradientCommand implements BasicCommand {
             return;
         }
 
-        Player player = (Player) sender;
-
         if (args.length == 0) {
             PermissionMenu menu = new PermissionMenu(
                     TextUtils.deserialize("Gradients"),
                     "gradient",
                     "gradient_name",
-                    player,
+                    pp,
                     "<gradients:<data>><data></reset>");
-            player.openInventory(menu.getInventory());
+            pp.openInventory(menu.getInventory());
             return;
         }
 
         switch (args[0].toLowerCase()) {
             case "reload":
-                if(player.isOp()) {
-                    player.sendMessage("Gradients config reloaded");
+                if (pp.isOp()) {
+                    pp.sendMessage("Gradients config reloaded");
                     Gradients.reload();
                 } else {
-                    player.sendMessage("Insufficient permissions");
+                    pp.sendMessage("Insufficient permissions");
                 }
                 break;
             case "set":
                 if (args.length < 2) {
-                    player.sendMessage("Usage: /gradient set <name>");
+                    pp.sendMessage("Usage: /gradient set <name>");
                     break;
                 }
                 String gradientName = args[1];
-                if (player.hasPermission("gradient." + gradientName)) {
-                    boolean success = Gradients.setPlayerGradient(player, gradientName);
+                if (pp.hasPermission("gradient." + gradientName)) {
+                    boolean success = Gradients.setPlayerGradient(pp, gradientName);
                     if (success) {
-                        player.sendMessage("Gradient set to: " + gradientName);
+                        pp.sendMessage("Gradient set to: " + gradientName);
                     } else {
-                        player.sendMessage("Gradient not found.");
+                        pp.sendMessage("Gradient not found.");
                     }
                 } else {
-                    player.sendMessage("You don't have permission for this gradient.");
+                    pp.sendMessage("You don't have permission for this gradient.");
                 }
                 break;
 
             case "clear":
-                boolean hadGradient = Gradients.setPlayerGradient(player, "");
+                boolean hadGradient = Gradients.setPlayerGradient(pp, "");
                 if (hadGradient) {
-                    player.sendMessage("Your gradient has been cleared.");
+                    pp.sendMessage("Your gradient has been cleared.");
                 } else {
-                    player.sendMessage("You had no gradient to clear.");
+                    pp.sendMessage("You had no gradient to clear.");
                 }
                 break;
 
             default:
-                player.sendMessage("Unknown subcommand.");
+                pp.sendMessage("Unknown subcommand.");
         }
     }
+
     @Override
-    public List<String> suggest(CommandSourceStack source, String[] args){
+    public List<String> suggest(CommandSourceStack source, String[] args) {
         if (args.length == 0 || args.length == 1) {
-            if(source.getSender().isOp()) {
+            if (source.getSender().isOp()) {
                 return List.of("set", "clear", "reload");
             }
             return List.of("set", "clear");
