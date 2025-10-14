@@ -2,6 +2,7 @@ package org.beeholy.holyCore.model;
 
 import me.clip.placeholderapi.PlaceholderAPI;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.TextDecoration;
 import org.beeholy.holyCore.utility.TextUtils;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -24,11 +25,11 @@ public class QuestItem extends ItemStack {
         clickCommands = click;
         ItemMeta meta = this.getItemMeta();
 
-        meta.displayName(TextUtils.deserialize(PlaceholderAPI.setPlaceholders(player, name)));
+        meta.displayName(TextUtils.deserialize(PlaceholderAPI.setPlaceholders(player, name)).decorationIfAbsent(TextDecoration.ITALIC, TextDecoration.State.FALSE));
 
         ArrayList<Component> loreComponents = new ArrayList<>();
         for(String line : lore){
-            loreComponents.add(TextUtils.deserialize(PlaceholderAPI.setPlaceholders(player, line)));
+            loreComponents.add(TextUtils.deserialize(PlaceholderAPI.setPlaceholders(player, line)).decorationIfAbsent(TextDecoration.ITALIC, TextDecoration.State.FALSE));
         }
         meta.lore(loreComponents);
         CustomModelDataComponent model = meta.getCustomModelDataComponent();

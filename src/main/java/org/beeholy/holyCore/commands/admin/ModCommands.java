@@ -1,4 +1,4 @@
-package org.beeholy.holyCore.commands.mod;
+package org.beeholy.holyCore.commands.admin;
 
 import com.destroystokyo.paper.profile.PlayerProfile;
 import com.mojang.brigadier.Command;

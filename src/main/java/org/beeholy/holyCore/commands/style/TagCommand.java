@@ -1,4 +1,4 @@
-package org.beeholy.holyCore.commands.chat;
+package org.beeholy.holyCore.commands.style;
 
 import io.papermc.paper.command.brigadier.BasicCommand;
 import io.papermc.paper.command.brigadier.CommandSourceStack;

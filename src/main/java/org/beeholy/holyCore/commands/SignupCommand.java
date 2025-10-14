@@ -2,6 +2,7 @@ package org.beeholy.holyCore.commands;
 
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.beeholy.holyCore.HolyCore;
+import org.beeholy.holyCore.commands.user.CooldownCommand;
 import org.beeholy.holyCore.utility.DatabaseManager;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;

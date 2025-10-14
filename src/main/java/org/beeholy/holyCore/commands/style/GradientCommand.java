@@ -1,9 +1,9 @@
-package org.beeholy.holyCore.commands.chat;
+package org.beeholy.holyCore.commands.style;
 
 import io.papermc.paper.command.brigadier.BasicCommand;
 import io.papermc.paper.command.brigadier.CommandSourceStack;
 import net.kyori.adventure.text.minimessage.MiniMessage;
-import org.beeholy.holyCore.chat.Colors;
+import org.beeholy.holyCore.chat.Gradients;
 import org.beeholy.holyCore.gui.PermissionMenu;
 import org.beeholy.holyCore.utility.TextUtils;
 import org.bukkit.command.CommandSender;
@@ -11,7 +11,7 @@ import org.bukkit.entity.Player;
 
 import java.util.List;
 
-public class ColorCommand implements BasicCommand {
+public class GradientCommand implements BasicCommand {
 
     MiniMessage mm = MiniMessage.miniMessage();
 
@@ -25,10 +25,11 @@ public class ColorCommand implements BasicCommand {
 
         if (args.length == 0) {
             PermissionMenu menu = new PermissionMenu(
-                    TextUtils.deserialize("           ᴄʜᴀᴛ ᴄᴏʟᴏʀѕ"),
-                    "color", "color_name",
+                    TextUtils.deserialize("          ɴᴀᴍᴇ ɢʀᴀᴅɪᴇɴᴛѕ"),
+                    "gradient",
+                    "gradient_name",
                     pp,
-                    "<colors:<data>><data></colors>");
+                    "<gradients:<data>><data></reset>");
             pp.openInventory(menu.getInventory());
             return;
         }
@@ -36,36 +37,36 @@ public class ColorCommand implements BasicCommand {
         switch (args[0].toLowerCase()) {
             case "reload":
                 if (pp.isOp()) {
-                    pp.sendMessage("Chat colors config reloaded");
-                    Colors.reload();
+                    pp.sendMessage("Gradients config reloaded");
+                    Gradients.reload();
                 } else {
-                    pp.sendMessage("Insufficent permissions");
+                    pp.sendMessage("Insufficient permissions");
                 }
                 break;
             case "set":
                 if (args.length < 2) {
-                    pp.sendMessage("Usage: /color set <name>");
+                    pp.sendMessage("Usage: /gradient set <name>");
                     break;
                 }
-                String colorName = args[1];
-                if (pp.hasPermission("color." + colorName)) {
-                    boolean success = Colors.setPlayerColor(pp, colorName);
+                String gradientName = args[1];
+                if (pp.hasPermission("gradient." + gradientName)) {
+                    boolean success = Gradients.setPlayerGradient(pp, gradientName);
                     if (success) {
-                        pp.sendMessage("Chat color set to: " + colorName);
+                        pp.sendMessage("Gradient set to: " + gradientName);
                     } else {
-                        pp.sendMessage("Chat color not found.");
+                        pp.sendMessage("Gradient not found.");
                     }
                 } else {
-                    pp.sendMessage("You don't have permission for this chat color.");
+                    pp.sendMessage("You don't have permission for this gradient.");
                 }
                 break;
 
             case "clear":
-                boolean hadTag = Colors.setPlayerColor(pp, "");
-                if (hadTag) {
-                    pp.sendMessage("Your chat color has been cleared.");
+                boolean hadGradient = Gradients.setPlayerGradient(pp, "");
+                if (hadGradient) {
+                    pp.sendMessage("Your gradient has been cleared.");
                 } else {
-                    pp.sendMessage("You had no chat color to clear.");
+                    pp.sendMessage("You had no gradient to clear.");
                 }
                 break;
 
@@ -85,7 +86,7 @@ public class ColorCommand implements BasicCommand {
         if (args.length == 2 && args[0].equalsIgnoreCase("set")) {
             CommandSender sender = source.getSender();
             if (sender instanceof Player player) {
-                return Colors.getPlayerColors(player);
+                return Gradients.getPlayerGradients(player);
             }
         }
         return List.of();

@@ -1,9 +1,7 @@
-package org.beeholy.holyCore.commands;
+package org.beeholy.holyCore.commands.user;
 
 import io.papermc.paper.command.brigadier.BasicCommand;
 import io.papermc.paper.command.brigadier.CommandSourceStack;
-import org.apache.commons.codec.language.bm.Lang;
-import org.beeholy.holyCore.HolyCore;
 import org.beeholy.holyCore.utility.Quests;
 import org.beeholy.holyCore.utility.TextUtils;
 import org.bukkit.entity.Player;

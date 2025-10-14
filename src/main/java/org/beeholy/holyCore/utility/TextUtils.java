@@ -57,7 +57,7 @@ public class TextUtils {
                         .build())
                 .build();
 
-        return mm.deserialize(message);
+        return mm.deserialize(PlaceholderAPI.setPlaceholders(player, message));
     }
 
     public static Component deserializeAsPlayer(String message, Player player, Component placeholder) {

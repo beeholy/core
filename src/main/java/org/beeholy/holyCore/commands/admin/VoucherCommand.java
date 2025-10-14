@@ -1,4 +1,4 @@
-package org.beeholy.holyCore.commands;
+package org.beeholy.holyCore.commands.admin;
 
 import io.papermc.paper.command.brigadier.BasicCommand;
 import io.papermc.paper.command.brigadier.CommandSourceStack;
