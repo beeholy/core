@@ -81,7 +81,6 @@ public class QuestsGUI extends Menu {
                 // Reward
                 quest.giveReward(player, rewardsLevels.get(playerLevel));
                 quest.setLevel(player, playerLevel + 1);
-                player.sendMessage("level up!");
             }
         }
         reloadInventory();

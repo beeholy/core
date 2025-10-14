@@ -44,10 +44,50 @@ quests:
     levels:
       256:
         lore: "<green>$100 cash</green>"
-        rewards: "(console) economy give {player_name} 100"
+        rewards: "(console) economy give %player_name% 100"
+      512:
+        lore: "<green>$100 cash</green>"
+        rewards: "(console) economy give %player_name% 100"
+      1024:
+        lore: "<green>$100 cash</green>"
+        rewards: "(console) economy give %player_name% 100"
+      2048:
+        lore: "<green>$100 cash</green>"
+        rewards: "(console) economy give %player_name% 100"
+  stone_quest:
+    name: "<gold>Dirt Mining Quest</gold>"
+    statistic: "MINE_BLOCK"
+    material: "STONE"
+    lore: "Break <data> stone to receive"
+    levels:
+      256:
+        lore: "<green>$100 cash</green>"
+        rewards: "(console) economy give %player_name% 100"
       512:
         lore: "<green>$100 cash</green>"
         rewards: "(console) economy give {player_name} 100"
+      600:
+        lore: "<green>$100 cash</green>"
+        rewards: "(console) economy give {player_name} 100"
+      700:
+        lore: "<green>$100 cash</green>"
+        rewards: "(console) economy give %player_name% 100"
+      800:
+        lore: "<green>$100 cash</green>"
+        rewards: "(console) economy give %player_name% 100"
+      900:
+        lore: "<green>$100 cash</green>"
+        rewards: "(console) economy give %player_name% 100"
+      1000:
+        lore: "<green>$100 cash</green>"
+        rewards: "(console) economy give %player_name% 100"
+      1100:
+        lore: "<green>$100 cash</green>"
+        rewards: "(console) economy give %player_name% 100"
+      1200:
+        lore: "<green>$100 cash</green>"
+        rewards: "(console) economy give %player_name% 100"
+
   playtime_quest:
     name: "<gold>Play for <data>m</gold>"
     statistic: "PLAY_ONE_MINUTE"
@@ -57,11 +97,11 @@ quests:
     levels:
       60:
         lore: "<green>$100 cash</green>"
-        rewards: "(console) economy give {player_name} 100"
+        rewards: "(console) economy give %player_name% 100"
       240:
         lore:
           - "<green>$100 cash</green>"
           - "<gold>1 Rare Key</gold>"
         rewards:
-          - "(console) crates key rare {player_name}"
-          - "(console) economy give {player_name} 250"
+          - "(console) crates key rare %player_name%"
+          - "(console) economy give %player_name% 250"

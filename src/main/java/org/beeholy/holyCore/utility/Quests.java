@@ -147,9 +147,9 @@ public class Quests {
 
                 ArrayList<String> rewardsStrings = new ArrayList<>();
                 if(rewardsSection.isList(rewardsKey + ".rewards")){
-                    rewardsStrings.addAll(questsSection.getStringList(rewardsKey + ".rewards"));
-                } else if (questsSection.isString(rewardsKey + ".rewards")){
-                    rewardsStrings.add(questsSection.getString(rewardsKey + ".rewards"));
+                    rewardsStrings.addAll(rewardsSection.getStringList(rewardsKey + ".rewards"));
+                } else if (rewardsSection.isString(rewardsKey + ".rewards")){
+                    rewardsStrings.add(rewardsSection.getString(rewardsKey + ".rewards"));
                 }
 
                 QuestReward reward = new QuestReward(Integer.parseInt(rewardsKey), rewardsStrings, lore);

@@ -39,7 +39,7 @@ public class Quest {
         this.material = material;
         this.rewards = rewards;
         this.loreString.addAll(lore);
-        this.key = new NamespacedKey(HolyCore.getInstance(), "quest_" + this.statistic.toString() + "_" + this.material.toString());
+        this.key = new NamespacedKey(HolyCore.getInstance(), "quest_" + this.statistic.toString().toLowerCase() + "_" + this.material.toString().toLowerCase());
     }
 
     // Constructor overload with entity
@@ -49,7 +49,7 @@ public class Quest {
         this.entityType = entityType;
         this.rewards = rewards;
         this.loreString.addAll(lore);
-        this.key = new NamespacedKey(HolyCore.getInstance(), "quest_" + this.statistic.toString() + "_" + this.entityType.toString());
+        this.key = new NamespacedKey(HolyCore.getInstance(), "quest_" + this.statistic.toString().toLowerCase() + "_" + this.entityType.toString().toLowerCase());
 
     }
 
@@ -61,7 +61,7 @@ public class Quest {
         this.entityType = null;
         this.rewards = rewards;
         this.loreString.addAll(lore);
-        this.key = new NamespacedKey(HolyCore.getInstance(), "quest_" + this.statistic.toString());
+        this.key = new NamespacedKey(HolyCore.getInstance(), "quest_" + this.statistic.toString().toLowerCase());
     }
 
 
@@ -84,9 +84,9 @@ public class Quest {
                 for(String line : rewardsStrings) {
                     if(line.startsWith("(console) ")){
                         CommandSender commandSender = Bukkit.getConsoleSender();
-                        Bukkit.getServer().dispatchCommand(commandSender, line.replace("(console) ", ""));
+                        Bukkit.getServer().dispatchCommand(commandSender, PlaceholderAPI.setPlaceholders(player,line.replace("(console) ", "")));
                     } else if(line.startsWith("(player) ")){
-                        Bukkit.getServer().dispatchCommand(player, line.replace("(player) ", ""));
+                        Bukkit.getServer().dispatchCommand(player, PlaceholderAPI.setPlaceholders(player,line.replace("(player) ", "")));
                     }
                 }
                 break;
@@ -125,6 +125,7 @@ public class Quest {
                                 .setPlaceholders(player, line))
                                 .decorationIfAbsent(TextDecoration.ITALIC, TextDecoration.State.FALSE));
             }
+            meta.setEnchantmentGlintOverride(true);
             meta.lore(lore);
             itemStack.setItemMeta(meta);
             return itemStack;
@@ -146,6 +147,7 @@ public class Quest {
             lore.addAll(rewards.getFirst().getLore(player));
             if (playerStatistic >= rewardQuantity) {
                 lore.add(TextUtils.deserialize(Quests.getClaim_lore()).decorationIfAbsent(TextDecoration.ITALIC, TextDecoration.State.FALSE));
+                meta.setEnchantmentGlintOverride(true);
             } else {
                 lore.add(Component.text(playerStatistic + " / " + rewardQuantity));
             }
@@ -156,8 +158,12 @@ public class Quest {
 
             if (playerStatistic >= rewardQuantity) {
                 lore.add(TextUtils.deserialize(Quests.getClaim_lore()).decorationIfAbsent(TextDecoration.ITALIC, TextDecoration.State.FALSE));
+                meta.setEnchantmentGlintOverride(true);
             } else {
-                lore.add(Component.text(playerStatistic + " / " + rewardQuantity));
+                String status_lore = Quests.getStatus_lore();
+                status_lore = status_lore.replace("<1>", String.valueOf(playerStatistic));
+                status_lore = status_lore.replace("<2>", String.valueOf(rewardQuantity));
+                lore.add(TextUtils.deserialize(status_lore).decorationIfAbsent(TextDecoration.ITALIC, TextDecoration.State.FALSE));
             }
         }
         meta.lore(lore);
