@@ -6,10 +6,7 @@ import org.beeholy.holyCore.chat.Colors;
 import org.beeholy.holyCore.chat.Gradients;
 import org.beeholy.holyCore.chat.Tags;
 import org.beeholy.holyCore.items.Vouchers;
-import org.beeholy.holyCore.utility.Crates;
-import org.beeholy.holyCore.utility.Language;
-import org.beeholy.holyCore.utility.Scoreboard;
-import org.beeholy.holyCore.utility.TextUtils;
+import org.beeholy.holyCore.utility.*;
 import org.jspecify.annotations.Nullable;
 
 public class ReloadCommand implements BasicCommand {
@@ -23,6 +20,7 @@ public class ReloadCommand implements BasicCommand {
         Crates.reload();
         Vouchers.reload();
         Scoreboard.reload();
+        Quests.reload();
         commandSourceStack.getSender().sendMessage(TextUtils.deserialize(Language.get("config_reload")));
     }
 

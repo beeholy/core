@@ -1,5 +1,6 @@
 package org.beeholy.holyCore.utility;
 
+import me.clip.placeholderapi.PlaceholderAPI;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.minimessage.Context;
@@ -75,7 +76,7 @@ public class TextUtils {
                         .build())
                 .build();
 
-        return mm.deserialize(message);
+        return mm.deserialize(PlaceholderAPI.setPlaceholders(player, message));
     }
 
     public static Component deserialize(String message) {

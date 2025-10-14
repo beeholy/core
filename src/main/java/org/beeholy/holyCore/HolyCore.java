@@ -48,6 +48,7 @@ public final class HolyCore extends JavaPlugin {
         Crates.setup();
         Language.setup();
         Scoreboard.reload();
+        Quests.reload();
 
         // register simple commands
         Commands.registerCommands(this);

@@ -25,6 +25,7 @@ public class RTPCommand implements BasicCommand {
     HolyCore plugin = HolyCore.getInstance();
     FileConfiguration config = plugin.getConfig();
     MiniMessage mm = MiniMessage.miniMessage();
+
     public RTPCommand(long cooldownTimeMs) {
         this.cooldownTimeMs = cooldownTimeMs;
     }

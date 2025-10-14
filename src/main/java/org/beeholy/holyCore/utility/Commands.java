@@ -41,7 +41,7 @@ public class Commands {
             commands.register("reload", "Fly commands", new ReloadCommand());
             commands.register("crates", "Crates commands", new CratesCommand());
             commands.register("item", "Item factory commands", new ItemCommand());
-
+            commands.register("quest", "Item factory commands", new QuestCommand());
             ModCommands modCommands = new ModCommands();
 
             commands.register(modCommands.banCommand);

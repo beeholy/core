@@ -1,4 +1,67 @@
-quest_name:
-  name: "<blue>styled name</blue>"
-  action: "MINE"
-  block:
+global:
+  claim_lore: "<green>Left click to claim</green>"
+  status_lore: "<1> / <2>"
+  completed_tag: "<green>[complete]</green>"
+  completed_lore:
+    - "You have"
+    - "completed this quest"
+pages:
+  mining:
+    name: "Mining Quests"
+    size: 36
+    slots:
+      0:
+        name: "Back"
+        material: "LIGHT_GRAY_STAINED_GLASS_PANE"
+        custom_model: "ui_left_arrow"
+        click:
+          - "(player) help"
+      1-8,9,17,18,26-35:
+        material: "LIGHT_GRAY_STAINED_GLASS_PANE"
+        custom_model: "ui_blank"
+        hide_tooltip: true
+      10: "dirt_quest"
+      11: "stone_quest"
+      12: "sand_quest"
+      13: "gravel_quest"
+      14: "diorite_quest"
+      15: "andesite_quest"
+      16: "granite_quest"
+      # Second row
+      19: "deepslate_quest"
+      20: "netherrack_quest"
+      21: "end_stone_quest"
+      22: ""
+      23: ""
+      24: ""
+      25: "playtime_quest"
+quests:
+  dirt_quest:
+    name: "<gold>Dirt Mining Quest</gold>"
+    statistic: "MINE_BLOCK"
+    material: "DIRT"
+    lore: "Break <data> dirt to receive"
+    levels:
+      256:
+        lore: "<green>$100 cash</green>"
+        rewards: "(console) economy give {player_name} 100"
+      512:
+        lore: "<green>$100 cash</green>"
+        rewards: "(console) economy give {player_name} 100"
+  playtime_quest:
+    name: "<gold>Play for <data>m</gold>"
+    statistic: "PLAY_ONE_MINUTE"
+    lore:
+      - "Play for %formatter_number_time_fromMins_<data>% to claim:"
+    claim_lore: "<green>[Click to claim]</green>"
+    levels:
+      60:
+        lore: "<green>$100 cash</green>"
+        rewards: "(console) economy give {player_name} 100"
+      240:
+        lore:
+          - "<green>$100 cash</green>"
+          - "<gold>1 Rare Key</gold>"
+        rewards:
+          - "(console) crates key rare {player_name}"
+          - "(console) economy give {player_name} 250"

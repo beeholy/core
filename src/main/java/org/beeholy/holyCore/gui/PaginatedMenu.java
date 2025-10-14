@@ -2,7 +2,6 @@ package org.beeholy.holyCore.gui;
 
 import net.kyori.adventure.text.Component;
 import org.beeholy.holyCore.utility.TextUtils;
-import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
@@ -72,6 +71,12 @@ public abstract class PaginatedMenu<T> extends Menu {
             inv.setItem(i - start, buildItem(data));
         }
 
+        // Blanks
+        List<Integer> blanks = List.of(0, 1, 2, 3, 5, 6, 7, 8);
+        for (int slot : blanks) {
+            getInventory().setItem(pageSize + slot, createControlItem("blank", ""));
+        }
+
         // Navigation Buttons
         if (items.size() > pageSize) {
             inv.setItem(previousIndex, createControlItem("left_arrow", "<italic:false><gray>Previous</gray>"));
@@ -85,7 +90,7 @@ public abstract class PaginatedMenu<T> extends Menu {
         ItemStack item = new ItemStack(Material.LIGHT_GRAY_STAINED_GLASS_PANE);
         ItemMeta meta = item.getItemMeta();
         CustomModelDataComponent component = meta.getCustomModelDataComponent();
-        switch(type){
+        switch (type) {
             case "left_arrow":
                 component.setStrings(List.of("ui_left_arrow"));
                 break;

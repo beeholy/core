@@ -11,7 +11,6 @@ import org.beeholy.holyCore.chat.Tags;
 import org.bukkit.OfflinePlayer;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -50,13 +49,13 @@ public class PAPIExpansion extends PlaceholderExpansion {
     public String onRequest(OfflinePlayer player, @NotNull String params) {
         if (params.toLowerCase().startsWith("gradient:")) {
             List<String> param = Arrays.stream(params.split(":")).toList();
-            if(param.size() == 2)
+            if (param.size() == 2)
                 return Gradients.getGradient(param.get(1)); //
-            if(param.size() == 3){
+            if (param.size() == 3) {
                 return LegacyComponentSerializer
                         .legacySection()
                         .serialize(MiniMessage.miniMessage()
-                        .deserialize(Gradients.getGradient(param.get(1)) + PlaceholderAPI.setBracketPlaceholders(player, param.get(2)) + "</gradient>"));
+                                .deserialize(Gradients.getGradient(param.get(1)) + PlaceholderAPI.setBracketPlaceholders(player, param.get(2)) + "</gradient>"));
             }
         }
 

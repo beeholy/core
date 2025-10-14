@@ -12,33 +12,20 @@ import org.beeholy.holyCore.utility.TextUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
-import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
-import java.util.function.Consumer;
 
 public class PermissionMenu extends PaginatedMenu<String> {
     private final NamespacedKey key;
     private final String permission;
     private final Player player;
     private final String displayName;
-
-    @Override
-    protected void updateInventory() {
-        super.updateInventory();
-        List<Integer> blanks = List.of(1,2,3,5,6,7,8);
-        for(int slot : blanks){
-            getInventory().setItem(pageSize + slot, createControlItem("blank", ""));
-        }
-        getInventory().setItem(pageSize, createControlItem("left_arrow", "<italic:false><gray>Style<gray>"));
-    }
 
     public PermissionMenu(Component title, String permission, String key, Player player, String displayName) {
         super(title, 27, List.of());
@@ -68,6 +55,12 @@ public class PermissionMenu extends PaginatedMenu<String> {
     }
 
     @Override
+    protected void updateInventory() {
+        super.updateInventory();
+        getInventory().setItem(pageSize, createControlItem("left_arrow", "<italic:false><gray>Style<gray>"));
+    }
+
+    @Override
     protected ItemStack buildItem(String data) {
         ItemStack item = new ItemStack(Material.NAME_TAG);
         ItemMeta meta = item.getItemMeta();
@@ -89,8 +82,7 @@ public class PermissionMenu extends PaginatedMenu<String> {
     public void handleClick(InventoryClickEvent event) {
         super.handleClick(event);
         event.setCancelled(true);
-        if(event.getSlot() == pageSize){
-            getInventory().close();
+        if (event.getSlot() == pageSize) {
             CommandSender sender = event.getWhoClicked();
             Bukkit.getServer().dispatchCommand(sender, "style");
         }

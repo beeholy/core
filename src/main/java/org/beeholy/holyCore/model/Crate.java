@@ -17,13 +17,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Crate {
-    private String name;
     private final List<Reward> rewards;
     private final Location location;
     private final String key;
     private final String keyName;
     private final List<String> keyLore;
     private final String customModelData;
+    private String name;
 
     public Crate(String key, String name, List<Reward> rewards, Location location, String keyName, List<String> keyLore, String customModelData) {
         this.key = key;
