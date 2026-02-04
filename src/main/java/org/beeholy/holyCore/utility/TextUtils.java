@@ -16,7 +16,34 @@ import org.beeholy.holyCore.economy.FlyTime;
 import org.beeholy.holyCore.hooks.VaultHook;
 import org.bukkit.entity.Player;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class TextUtils {
+
+    private static final Map<Character, Character> smallCapsMap = new HashMap<>();
+
+    static {
+        smallCapsMap.put('a', 'ᴀ'); smallCapsMap.put('b', 'ʙ'); smallCapsMap.put('c', 'ᴄ');
+        smallCapsMap.put('d', 'ᴅ'); smallCapsMap.put('e', 'ᴇ'); smallCapsMap.put('f', 'ғ');
+        smallCapsMap.put('g', 'ɢ'); smallCapsMap.put('h', 'ʜ'); smallCapsMap.put('i', 'ɪ');
+        smallCapsMap.put('j', 'ᴊ'); smallCapsMap.put('k', 'ᴋ'); smallCapsMap.put('l', 'ʟ');
+        smallCapsMap.put('m', 'ᴍ'); smallCapsMap.put('n', 'ɴ'); smallCapsMap.put('o', 'ᴏ');
+        smallCapsMap.put('p', 'ᴘ'); smallCapsMap.put('q', 'ǫ'); smallCapsMap.put('r', 'ʀ');
+        smallCapsMap.put('s', 'ѕ'); smallCapsMap.put('t', 'ᴛ'); smallCapsMap.put('u', 'ᴜ');
+        smallCapsMap.put('v', 'ᴠ'); smallCapsMap.put('w', 'ᴡ'); smallCapsMap.put('x', 'x');
+        smallCapsMap.put('y', 'ʏ'); smallCapsMap.put('z', 'ᴢ');
+    }
+
+    public static String toSmallText(String input) {
+        StringBuilder result = new StringBuilder();
+        for (char c : input.toLowerCase().toCharArray()) {
+            result.append(smallCapsMap.getOrDefault(c, c));
+        }
+        return result.toString();
+    }
+
+
     static Tag colorsTag(final ArgumentQueue args, final Context ctx) {
         final String colorName = args.popOr("The <colors> tag requires exactly one argument, the name.").value();
 

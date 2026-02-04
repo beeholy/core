@@ -2,8 +2,6 @@ package org.beeholy.holyCore.utility;
 
 import me.clip.placeholderapi.PlaceholderAPI;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.event.ClickEvent;
-import org.apache.commons.lang.ArrayUtils;
 import org.beeholy.holyCore.HolyCore;
 import org.beeholy.holyCore.gui.QuestsGUI;
 import org.beeholy.holyCore.model.Quest;
@@ -16,9 +14,6 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.inventory.meta.components.CustomModelDataComponent;
 
 import java.io.File;
 import java.util.ArrayList;

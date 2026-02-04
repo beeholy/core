@@ -4,7 +4,6 @@ import net.kyori.adventure.text.Component;
 import org.beeholy.holyCore.model.Quest;
 import org.beeholy.holyCore.model.QuestItem;
 import org.beeholy.holyCore.model.QuestReward;
-import org.beeholy.holyCore.utility.Quests;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;

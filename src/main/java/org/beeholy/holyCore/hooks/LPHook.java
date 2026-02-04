@@ -11,18 +11,16 @@ public class LPHook {
 
     static LuckPerms luckPerms = LuckPermsProvider.get();
 
-    static Map<String, Integer> rankPriority;
 
     public static LuckPerms getLuckPerms() {
         return luckPerms;
     }
 
     public static Map<String, Integer> getRankPriority() {
-        Map<String, Integer> rankPriority = luckPerms.getGroupManager().getLoadedGroups().stream()
+        return luckPerms.getGroupManager().getLoadedGroups().stream()
                 .collect(Collectors.toMap(
                         Group::getName,
                         group -> group.getWeight().orElse(0) // fallback to 0 if no weight
                 ));
-        return rankPriority;
     }
 }

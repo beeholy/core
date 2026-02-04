@@ -28,7 +28,7 @@ public class PermissionMenu extends PaginatedMenu<String> {
     private final String displayName;
 
     public PermissionMenu(Component title, String permission, String key, Player player, String displayName) {
-        super(title, 27, List.of());
+        super(title, 36, List.of());
         this.permission = permission;
         this.player = player;
         this.key = new NamespacedKey(HolyCore.getInstance(), key);

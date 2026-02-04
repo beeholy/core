@@ -56,6 +56,6 @@ public class HologramCommand implements BasicCommand {
 
     @Override
     public @Nullable String permission() {
-        return "hologram.admin";
+        return "holycore.admin";
     }
 }

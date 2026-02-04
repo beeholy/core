@@ -62,6 +62,7 @@ public final class HolyCore extends JavaPlugin {
         Bukkit.getPluginManager().registerEvents(new OverrideListeners(), this);
         //Bukkit.getPluginManager().registerEvents(new VoteListener(), this);
         Bukkit.getPluginManager().registerEvents(new SpawnerPickListners(), this);
+        Bukkit.getPluginManager().registerEvents(new CaptureEggListeners(), this);
         // Rank priority using luckperms api
         LuckPerms luckPerms = LuckPermsProvider.get();
         final Map<String, Integer> rankPriority = LPHook.getRankPriority();

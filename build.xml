@@ -6,7 +6,7 @@
     <property name="foundation.version" value="${pom.properties.foundation.version}"/>
 
     <target name="Build">
-        <jar jarfile="C:/Users/froom/Documents/PaperServer/plugins/${ant.project.name}.jar"
+        <jar jarfile="/home/lewis/Documents/HolyMC/DevServer/plugins/${ant.project.name}.jar"
              basedir="./target/classes/" includes="**/*">
         </jar>
     </target>
