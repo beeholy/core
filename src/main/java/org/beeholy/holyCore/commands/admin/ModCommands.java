@@ -14,6 +14,7 @@ import io.papermc.paper.command.brigadier.argument.resolvers.PlayerProfileListRe
 import io.papermc.paper.command.brigadier.argument.resolvers.selector.PlayerSelectorArgumentResolver;
 import org.beeholy.holyCore.economy.FlyTime;
 import org.beeholy.holyCore.events.PunishEvent;
+import org.beeholy.holyCore.events.UnPunishEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.Statistic;
@@ -52,6 +53,20 @@ public class ModCommands {
                             .then(Commands.argument("reason", StringArgumentType.greedyString())
                                     .executes(ModCommands::handleKick)
                             )
+                    )
+                    .build();
+    public LiteralCommandNode<CommandSourceStack> unmuteCommand =
+            Commands.literal("unmute")
+                    .requires(sender -> sender.getSender().hasPermission("holycore.unmute"))
+                    .then(Commands.argument("profile", ArgumentTypes.playerProfiles())
+                            .executes(ModCommands::handleUnmute)
+                    )
+                    .build();
+    public LiteralCommandNode<CommandSourceStack> unbanCommand =
+            Commands.literal("unban")
+                    .requires(sender -> sender.getSender().hasPermission("holycore.unban"))
+                    .then(Commands.argument("profile", ArgumentTypes.playerProfiles())
+                            .executes(ModCommands::handleUnban)
                     )
                     .build();
     public LiteralCommandNode<CommandSourceStack> statCommand =
@@ -114,7 +129,35 @@ public class ModCommands {
             CommandSender sender = ctx.getSource().getSender();
             Bukkit.getServer().dispatchCommand(sender, "essentials:kick " + nameString + " " + reasonString);
             // Call event for punisher / notifier or hook into discordsrv
-            Bukkit.getPluginManager().callEvent(new PunishEvent(profile.getName(), sender.getName(), "kicked", null, reasonString));
+            Bukkit.getPluginManager().callEvent(new PunishEvent(profile.getName(), sender.getName(), "kicked", "N/A", reasonString));
+        }
+
+        return Command.SINGLE_SUCCESS;
+    }
+
+    private static int handleUnmute(CommandContext<CommandSourceStack> ctx) throws CommandSyntaxException {
+        final PlayerProfileListResolver profilesResolver = ctx.getArgument("profile", PlayerProfileListResolver.class);
+        final Collection<PlayerProfile> foundProfiles = profilesResolver.resolve(ctx.getSource());
+        for (final PlayerProfile profile : foundProfiles) {
+            String nameString = profile.getName();
+            CommandSender sender = ctx.getSource().getSender();
+            Bukkit.getServer().dispatchCommand(sender, "essentials:mute " + nameString);
+            // Call event for punisher / notifier or hook into discordsrv
+            Bukkit.getPluginManager().callEvent(new UnPunishEvent(profile.getName(), sender.getName(), "unmuted"));
+        }
+
+        return Command.SINGLE_SUCCESS;
+    }
+
+    private static int handleUnban(CommandContext<CommandSourceStack> ctx) throws CommandSyntaxException {
+        final PlayerProfileListResolver profilesResolver = ctx.getArgument("profile", PlayerProfileListResolver.class);
+        final Collection<PlayerProfile> foundProfiles = profilesResolver.resolve(ctx.getSource());
+        for (final PlayerProfile profile : foundProfiles) {
+            String nameString = profile.getName();
+            CommandSender sender = ctx.getSource().getSender();
+            Bukkit.getServer().dispatchCommand(sender, "essentials:unban " + nameString);
+            // Call event for punisher / notifier or hook into discordsrv
+            Bukkit.getPluginManager().callEvent(new UnPunishEvent(profile.getName(), sender.getName(), "unbanned"));
         }
 
         return Command.SINGLE_SUCCESS;

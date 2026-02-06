@@ -1,12 +1,12 @@
 <?xml version="1.0" ?>
 <!DOCTYPE xml>
-<project name="HolyCore" default="Build">
+<project name="HolyMod" default="Build">
 
-    <xmlproperty file="pom.xml" prefix="pom" keeproot="false" />
+    <xmlproperty file="pom.xml" prefix="pom" keeproot="false"/>
     <property name="foundation.version" value="${pom.properties.foundation.version}"/>
 
     <target name="Build">
-        <jar jarfile="/home/lewis/Documents/HolyMC_Live/plugins/${ant.project.name}.jar"
+        <jar jarfile="C:/Users/DeanC/OneDrive/Documents/Paper Server/plugins/${ant.project.name}.jar"
              basedir="./target/classes/" includes="**/*">
         </jar>
     </target>

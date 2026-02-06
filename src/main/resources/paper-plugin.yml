@@ -20,7 +20,10 @@ dependencies:
       required: true
     DiscordSRV:
       load: AFTER
-      required: false
+      required: true
     PlaceholderAPI:
       load: BEFORE
-      required: false
+      required: true
+    GriefPrevention:
+      load: BEFORE
+      required: true

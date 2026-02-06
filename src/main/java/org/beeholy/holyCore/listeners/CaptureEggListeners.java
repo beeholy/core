@@ -6,6 +6,7 @@ import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.format.TextDecoration;
 import net.md_5.bungee.chat.ComponentSerializer;
 import org.beeholy.holyCore.HolyCore;
+import org.beeholy.holyCore.hooks.GPHook;
 import org.beeholy.holyCore.items.ItemFactory;
 import org.beeholy.holyCore.utility.TextUtils;
 import org.bukkit.Bukkit;
@@ -50,6 +51,12 @@ public class CaptureEggListeners implements Listener {
         Entity entity = event.getRightClicked();
 
         if (!(entity instanceof Mob)) return;
+
+        Location entityLocation = entity.getLocation();
+
+        if(!(GPHook.hasBuildPermission(player, entityLocation))) {
+            return;
+        }
 
         EntitySnapshot snapshot = entity.createSnapshot();
         meta.setSpawnedEntity(snapshot);

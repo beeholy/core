@@ -37,7 +37,7 @@ public class Commands {
             commands.register("tag", "Tags commands", new TagCommand());
             commands.register("gradient", "Gradients command", new GradientCommand());
             commands.register("color", "Chat colors command", new ColorCommand());
-            commands.register("rtp", "Random teleport command", new RTPCommand(10_000));
+            commands.register("hrtp", "Random teleport command", new RTPCommand(10_000));
             commands.register("voucher", "Voucher commands", new VoucherCommand());
             commands.register("fly", "Fly commands", new FlyCommand());
             commands.register("hologram", "Fly commands", new HologramCommand());
@@ -52,6 +52,8 @@ public class Commands {
             commands.register(modCommands.kickCommand);
             commands.register(modCommands.muteCommand);
             commands.register(modCommands.statCommand);
+            commands.register(modCommands.unmuteCommand);
+            commands.register(modCommands.unbanCommand);
 
             for (String command : commandsConfig.getKeys(false)) {
                 String permission = commandsConfig.getString(command + ".permission");

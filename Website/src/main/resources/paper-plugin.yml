@@ -1,0 +1,4 @@
+name: Holy
+version: '1.0-SNAPSHOT'
+main: me.buttholy.holy.Holy
+api-version: '1.21'
