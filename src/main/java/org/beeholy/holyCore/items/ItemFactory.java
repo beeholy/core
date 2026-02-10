@@ -19,7 +19,7 @@ public class ItemFactory {
         ItemStack item = new ItemStack(Material.DIAMOND_PICKAXE); // You can choose any item
         ItemMeta meta = item.getItemMeta();
         if (meta != null) {
-            meta.displayName(TextUtils.deserialize("<italic:false><grey>Spawner Pickaxe</grey></italic>")); // Optional: custom name
+            meta.displayName(TextUtils.deserialize("<italic:false><grey>ѕᴘᴀᴡɴᴇʀ ᴘɪᴄᴋᴀxᴇ</grey></italic>")); // Optional: custom name
             NamespacedKey key = new NamespacedKey(HolyCore.getInstance(), "spawner_pick");
             meta.getPersistentDataContainer().set(key, PersistentDataType.BOOLEAN, Boolean.TRUE);
             meta.lore(List.of(
