@@ -36,6 +36,7 @@ import java.util.Map;
 public class CaptureEggListeners implements Listener {
     @EventHandler
     public void onEntityInteract(PlayerInteractEntityEvent event) {
+        if (event.isCancelled()) return;
         Player player = event.getPlayer();
         ItemStack mainhand = player.getInventory().getItemInMainHand();
         if (!(mainhand.getItemMeta() instanceof SpawnEggMeta)) return;
@@ -133,6 +134,7 @@ public class CaptureEggListeners implements Listener {
     }
     @EventHandler
     public void onPlace(PlayerInteractEvent e) {
+        if (e.isCancelled()) return;
         Player p = e.getPlayer();
         ItemStack mainhand = p.getInventory().getItemInMainHand();
         if (!(mainhand.getItemMeta() instanceof SpawnEggMeta)) return;

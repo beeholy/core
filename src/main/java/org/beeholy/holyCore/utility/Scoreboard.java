@@ -14,6 +14,7 @@ import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Team;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
@@ -24,6 +25,7 @@ import java.util.UUID;
 public class Scoreboard {
 
     private static final HashMap<UUID, Scoreboard> players = new HashMap<>();
+    private static final ArrayList<UUID> scoreHidden = new ArrayList<>();
     private static String title;
     private static List<String> slots;
 
@@ -80,10 +82,23 @@ public class Scoreboard {
     }
 
     public static Scoreboard removeScore(Player player) {
+        player.getScoreboard().getObjective("sidebar").unregister();
         return players.remove(player.getUniqueId());
     }
 
+    public static void hideScore(Player player) {
+        scoreHidden.add(player.getUniqueId());
+        removeScore(player);
+    }
+
+    public static void showScore(Player player) {
+        scoreHidden.remove(player.getUniqueId());
+        createScore(player);
+        updateScoreboard(player);
+    }
+
     public static void updateScoreboard(Player player) {
+        if(scoreHidden.contains(player.getUniqueId())) return;
         if (hasScore(player)) {
             Scoreboard helper = getByPlayer(player);
             helper.setTitle(PlaceholderAPI.setPlaceholders(player, title));

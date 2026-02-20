@@ -7,7 +7,7 @@ import org.beeholy.holyCore.HolyCore;
 import org.beeholy.holyCore.gui.RewardsMenu;
 import org.beeholy.holyCore.model.Crate;
 import org.beeholy.holyCore.utility.Crates;
-import org.beeholy.holyCore.utility.DatabaseManager;
+import org.beeholy.holyCore.utility.DBManager;
 import org.beeholy.holyCore.utility.Language;
 import org.beeholy.holyCore.utility.TextUtils;
 import org.bukkit.Bukkit;
@@ -22,8 +22,10 @@ public class CratesCommand implements BasicCommand {
 
     public void giveKey(Player player, String crateName, int amount) {
         Crate crate = Crates.getCrates().get(crateName);
+
         ItemStack key = crate.getKeyItem();
         key.setAmount(amount);
+
         PlayerGiveResult given = player.give(List.of(key), false);
         player.sendMessage(TextUtils.deserialize(Language.get("crate_keys_given"), String.valueOf(amount), crate.getName()));
         Collection<ItemStack> leftover = given.leftovers();
@@ -31,7 +33,7 @@ public class CratesCommand implements BasicCommand {
             ItemStack leftoverStack = (ItemStack) leftover.toArray()[0];
             int amountLeftover = leftoverStack.getAmount();
             Bukkit.getScheduler().runTaskAsynchronously(HolyCore.getInstance(), () -> {
-                DatabaseManager db = DatabaseManager.getInstance();
+                DBManager db = DBManager.getInstance();
                 db.addCratesClaim(player.getUniqueId(), crateName, amountLeftover);
             });
             player.sendMessage(TextUtils.deserialize(Language.get("crates_overflow"), String.valueOf(amountLeftover)));
@@ -41,7 +43,7 @@ public class CratesCommand implements BasicCommand {
     public void claimKeys(Player player) {
         UUID uuid = player.getUniqueId();
         Bukkit.getScheduler().runTaskAsynchronously(HolyCore.getInstance(), () -> {
-            DatabaseManager db = DatabaseManager.getInstance();
+            DBManager db = DBManager.getInstance();
             Map<String, Integer> crates = db.getCratesClaims(uuid);
             int slotsNeeded = 0;
             // Find slots needed

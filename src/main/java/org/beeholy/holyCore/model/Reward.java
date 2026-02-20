@@ -4,6 +4,7 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextDecoration;
 import org.beeholy.holyCore.utility.TextUtils;
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.components.CustomModelDataComponent;
@@ -32,10 +33,13 @@ public class Reward {
         }
         meta.lore(deserializedLore);
 
-        CustomModelDataComponent modelDataComponent = meta.getCustomModelDataComponent();
-        modelDataComponent.setStrings(List.of(customModelData));
-        meta.setCustomModelDataComponent(modelDataComponent);
-
+        if(customModelData.startsWith("nexo:")){
+            meta.setItemModel(NamespacedKey.fromString(customModelData));
+        } else {
+            CustomModelDataComponent modelDataComponent = meta.getCustomModelDataComponent();
+            modelDataComponent.setStrings(List.of(customModelData));
+            meta.setCustomModelDataComponent(modelDataComponent);
+        }
         this.item.setItemMeta(meta);
         this.item.setAmount(stackSize);
     }

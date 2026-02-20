@@ -9,6 +9,7 @@ import net.kyori.adventure.text.minimessage.tag.Tag;
 import net.kyori.adventure.text.minimessage.tag.resolver.ArgumentQueue;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 import net.kyori.adventure.text.minimessage.tag.standard.StandardTags;
+import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.beeholy.holyCore.chat.Colors;
 import org.beeholy.holyCore.chat.Gradients;
 import org.beeholy.holyCore.chat.Tags;
@@ -88,10 +89,16 @@ public class TextUtils {
     }
 
     public static Component deserializeAsPlayer(String message, Player player, Component placeholder) {
-        MiniMessage mm = MiniMessage.miniMessage();
-        mm = MiniMessage.builder().tags(TagResolver.builder()
+        Component safeChat = Component.text(
+                MiniMessage.miniMessage().escapeTags(
+                PlainTextComponentSerializer.plainText()
+                        .serialize(placeholder)
+                )
+        );
+
+        MiniMessage mm = MiniMessage.builder().tags(TagResolver.builder()
                         .resolver(StandardTags.defaults())
-                        .tag("data", Tag.inserting(placeholder))
+                        .tag("data", Tag.inserting(safeChat))
                         .tag("player_tag", Tag.preProcessParsed(Tags.getPlayerTag(player)))
                         .tag("player_rank", Tag.preProcessParsed(VaultHook.getChat().getPlayerPrefix(player)))
                         .tag("player_gradient", Tag.preProcessParsed(Gradients.getPlayerGradient(player)))
@@ -104,6 +111,7 @@ public class TextUtils {
                 .build();
 
         return mm.deserialize(PlaceholderAPI.setPlaceholders(player, message));
+
     }
 
     public static Component deserialize(String message) {

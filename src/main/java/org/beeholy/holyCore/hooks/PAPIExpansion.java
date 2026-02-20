@@ -9,6 +9,7 @@ import org.beeholy.holyCore.chat.Colors;
 import org.beeholy.holyCore.chat.Gradients;
 import org.beeholy.holyCore.chat.Tags;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
@@ -70,6 +71,24 @@ public class PAPIExpansion extends PlaceholderExpansion {
         if (params.toLowerCase().startsWith("color:")) {
             String gradientName = params.substring("color:".length());
             return Colors.getColor(gradientName);
+        }
+
+        if(params.toLowerCase().equals("gradient")){
+            if(player.isOnline()) {
+                return Gradients.getPlayerGradient((Player) player);
+            } else {
+                return "";
+            }
+        }
+
+        if(params.toLowerCase().equals("envoy")){
+            String nextEnvoy = PlaceholderAPI.setPlaceholders(player, "%axenvoy_nextstart_default%");
+            String amountLeft = PlaceholderAPI.setPlaceholders(player, "%axenvoy_remaining_default%");
+            if(nextEnvoy.equals("running")) {
+                return amountLeft;
+            } else {
+                return nextEnvoy;
+            }
         }
 
         return null;

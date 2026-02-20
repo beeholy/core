@@ -9,6 +9,7 @@ import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 
@@ -95,6 +96,51 @@ public class Tags {
         String tagName = player.getPersistentDataContainer().get(key, PersistentDataType.STRING);
         String tag = getTag(tagName);
         return tagName != null ? tag : "";
+    }
+
+    public static boolean addTag(String name, String tag){
+        if(tagsConfig.isSet(name)){
+            return false;
+        } else {
+            tagsConfig.set(name, tag);
+            try {
+                tagsConfig.save(tagsFile);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+            reload();
+            return true;
+        }
+    }
+
+    public static boolean removeTag(String name){
+        if(tagsConfig.isSet(name)){
+            tagsConfig.set(name, null);
+            try {
+                tagsConfig.save(tagsFile);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+            reload();
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public static boolean editTag(String name, String newTag){
+        if(tagsConfig.isSet(name)){
+            tagsConfig.set(name, newTag);
+            try {
+                tagsConfig.save(tagsFile);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+            reload();
+            return true;
+        } else {
+            return false;
+        }
     }
 
     public static Tags getInstance() {

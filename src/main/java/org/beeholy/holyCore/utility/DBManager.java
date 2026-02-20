@@ -11,12 +11,12 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
 
-public class DatabaseManager {
-    private static final DatabaseManager instance = new DatabaseManager();
+public class DBManager {
+    private static final DBManager instance = new DBManager();
 
     private Connection connection;
 
-    public static DatabaseManager getInstance() {
+    public static DBManager getInstance() {
         return instance;
     }
 

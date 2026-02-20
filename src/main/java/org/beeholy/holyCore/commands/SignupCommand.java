@@ -3,7 +3,7 @@ package org.beeholy.holyCore.commands;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.beeholy.holyCore.HolyCore;
 import org.beeholy.holyCore.commands.user.CooldownCommand;
-import org.beeholy.holyCore.utility.DatabaseManager;
+import org.beeholy.holyCore.utility.DBManager;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.jspecify.annotations.Nullable;
@@ -27,7 +27,7 @@ public class SignupCommand extends CooldownCommand {
                         "\nExpires in 5min \n"
         ));
         Bukkit.getScheduler().runTaskAsynchronously(HolyCore.getInstance(), () -> {
-            DatabaseManager.getInstance().createSignupLink(player.getUniqueId(), keyString);
+            DBManager.getInstance().createSignupLink(player.getUniqueId(), keyString);
         });
     }
 

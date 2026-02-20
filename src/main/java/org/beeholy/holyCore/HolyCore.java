@@ -11,18 +11,22 @@ import org.beeholy.holyCore.hooks.LPHook;
 import org.beeholy.holyCore.hooks.PAPIExpansion;
 import org.beeholy.holyCore.items.Vouchers;
 import org.beeholy.holyCore.listeners.*;
+import org.beeholy.holyCore.listeners.enchants.BookListeners;
+import org.beeholy.holyCore.listeners.enchants.BreakToolListeners;
+import org.beeholy.holyCore.listeners.enchants.TelekinesisListeners;
 import org.beeholy.holyCore.utility.*;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import java.awt.print.Book;
 import java.util.Map;
 
 public final class HolyCore extends JavaPlugin {
 
     private static HolyCore instance;
-    private final DatabaseManager dbManager = DatabaseManager.getInstance();
+    private final DBManager dbManager = DBManager.getInstance();
     private final MiniMessage mm = MiniMessage.miniMessage();
 
     public static HolyCore getInstance() {
@@ -50,6 +54,9 @@ public final class HolyCore extends JavaPlugin {
         Scoreboard.reload();
         Quests.reload();
 
+        // resource bossbar
+        ResourceBossbar resourceBossbar = new ResourceBossbar();
+        Bukkit.getPluginManager().registerEvents(resourceBossbar, this);
         // register simple commands
         Commands.registerCommands(this);
 
@@ -63,6 +70,14 @@ public final class HolyCore extends JavaPlugin {
         //Bukkit.getPluginManager().registerEvents(new VoteListener(), this);
         Bukkit.getPluginManager().registerEvents(new SpawnerPickListners(), this);
         Bukkit.getPluginManager().registerEvents(new CaptureEggListeners(), this);
+        Bukkit.getPluginManager().registerEvents(new CommandEventListener(), this);
+        Bukkit.getPluginManager().registerEvents(new DurabilityListener(), this);
+
+        // Enchantment Listeners
+        Bukkit.getPluginManager().registerEvents(new BookListeners(), this);
+        Bukkit.getPluginManager().registerEvents(new TelekinesisListeners(), this);
+        Bukkit.getPluginManager().registerEvents(new BreakToolListeners(), this);
+
         // Rank priority using luckperms api
         LuckPerms luckPerms = LuckPermsProvider.get();
         final Map<String, Integer> rankPriority = LPHook.getRankPriority();

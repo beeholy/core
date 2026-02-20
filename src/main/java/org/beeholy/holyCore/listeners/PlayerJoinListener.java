@@ -24,7 +24,7 @@ public class PlayerJoinListener implements Listener {
         Bukkit.getScheduler().runTaskAsynchronously(HolyCore.getInstance(), () -> {
             String messageString = Language.get("welcome_message");
             // Add to users table in database if not joined before
-            Boolean firstJoin = DatabaseManager.getInstance().createUser(event.getPlayer().getName(), event.getPlayer().getUniqueId());
+            Boolean firstJoin = DBManager.getInstance().createUser(event.getPlayer().getName(), event.getPlayer().getUniqueId());
             if (firstJoin)
                 messageString = Language.get("first_join_message");
 
@@ -38,7 +38,7 @@ public class PlayerJoinListener implements Listener {
 
         Tablist.send(player);
 
-        ResourcePack.sendResourcePack(player);
-
+        // Set up no collision
+        CollisionManager.apply(event.getPlayer());
     }
 }

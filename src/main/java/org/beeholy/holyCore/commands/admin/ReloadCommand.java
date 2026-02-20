@@ -2,6 +2,7 @@ package org.beeholy.holyCore.commands.admin;
 
 import io.papermc.paper.command.brigadier.BasicCommand;
 import io.papermc.paper.command.brigadier.CommandSourceStack;
+import org.beeholy.holyCore.HolyCore;
 import org.beeholy.holyCore.chat.Colors;
 import org.beeholy.holyCore.chat.Gradients;
 import org.beeholy.holyCore.chat.Tags;
@@ -13,6 +14,7 @@ public class ReloadCommand implements BasicCommand {
 
     @Override
     public void execute(CommandSourceStack commandSourceStack, String[] strings) {
+        HolyCore.getInstance().reloadConfig();
         Colors.reload();
         Gradients.reload();
         Tags.reload();
@@ -21,6 +23,7 @@ public class ReloadCommand implements BasicCommand {
         Vouchers.reload();
         Scoreboard.reload();
         Quests.reload();
+
         commandSourceStack.getSender().sendMessage(TextUtils.deserialize(Language.get("config_reload")));
     }
 

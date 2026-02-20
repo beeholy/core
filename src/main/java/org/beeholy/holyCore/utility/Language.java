@@ -40,7 +40,7 @@ public class Language {
     public static String get(String key) {
         if (strings.containsKey(key))
             return strings.get(key);
-        return "";
+        return "Undefined - " + key;
     }
 
 }

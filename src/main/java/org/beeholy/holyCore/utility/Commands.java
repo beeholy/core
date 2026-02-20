@@ -11,6 +11,7 @@ import org.beeholy.holyCore.commands.style.TagCommand;
 import org.beeholy.holyCore.commands.user.FlyCommand;
 import org.beeholy.holyCore.commands.user.QuestCommand;
 import org.beeholy.holyCore.commands.user.RTPCommand;
+import org.beeholy.holyCore.commands.user.ScoreboardCommand;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.Plugin;
@@ -33,7 +34,7 @@ public class Commands {
 
         manager.registerEventHandler(LifecycleEvents.COMMANDS, event -> {
             final io.papermc.paper.command.brigadier.Commands commands = event.registrar();
-            commands.register("signup", "Sign up for holymc.uk web", new SignupCommand());
+            //commands.register("signup", "Sign up for holymc.uk web", new SignupCommand());
             commands.register("tag", "Tags commands", new TagCommand());
             commands.register("gradient", "Gradients command", new GradientCommand());
             commands.register("color", "Chat colors command", new ColorCommand());
@@ -46,14 +47,7 @@ public class Commands {
             commands.register("item", "Item factory commands", new ItemCommand());
             commands.register("quest", "Quest commands", new QuestCommand());
             commands.register("meta", "Player meta commands", new MetaCommand());
-            ModCommands modCommands = new ModCommands();
-
-            commands.register(modCommands.banCommand);
-            commands.register(modCommands.kickCommand);
-            commands.register(modCommands.muteCommand);
-            commands.register(modCommands.statCommand);
-            commands.register(modCommands.unmuteCommand);
-            commands.register(modCommands.unbanCommand);
+            commands.register("scoreboard", "Scoreboard toggle", new ScoreboardCommand());
 
             for (String command : commandsConfig.getKeys(false)) {
                 String permission = commandsConfig.getString(command + ".permission");
