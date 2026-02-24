@@ -28,7 +28,8 @@ public class ColorCommand implements BasicCommand {
                     TextUtils.deserialize("           ᴄʜᴀᴛ ᴄᴏʟᴏʀѕ"),
                     "color", "color_name",
                     pp,
-                    "<colors:<data>><data></colors>");
+                    "<colors:<data>><data></colors>",
+                    "color_tag");
             pp.openInventory(menu.getInventory());
             return;
         }

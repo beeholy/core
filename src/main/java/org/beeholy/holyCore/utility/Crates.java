@@ -4,21 +4,20 @@ import org.beeholy.holyCore.HolyCore;
 import org.beeholy.holyCore.model.Crate;
 import org.beeholy.holyCore.model.Reward;
 import org.bukkit.Location;
+import org.bukkit.World;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class Crates {
     private static File cratesFile;
     private static FileConfiguration cratesConfig;
     private static Map<String, Crate> crates;
+    private static Set<String> bannedWorlds = new HashSet<>();
 
     public static void setup() {
         cratesFile = new File(HolyCore.getInstance().getDataFolder(), "crates.yml");
@@ -29,13 +28,23 @@ public class Crates {
         }
 
         cratesConfig = YamlConfiguration.loadConfiguration(cratesFile);
-        crates.putAll(loadCrates(cratesConfig));
+        crates.putAll(loadCrates(cratesConfig.getConfigurationSection("crates")));
+        if(!(cratesConfig.getStringList("banned_worlds").isEmpty())){
+            bannedWorlds.addAll(cratesConfig.getStringList("banned_worlds"));
+        }
     }
 
     public static void reload() {
         crates.clear();
         cratesConfig = YamlConfiguration.loadConfiguration(cratesFile);
-        crates.putAll(loadCrates(cratesConfig));
+        crates.putAll(loadCrates(cratesConfig.getConfigurationSection("crates")));
+        if(!(cratesConfig.getStringList("banned_worlds").isEmpty())){
+            bannedWorlds.addAll(cratesConfig.getStringList("banned_worlds"));
+        }
+    }
+
+    public static boolean isWorldBanned(World world){
+        return bannedWorlds.contains(world.getName());
     }
 
     public static void save() {
@@ -46,7 +55,7 @@ public class Crates {
         }
     }
 
-    public static Map<String, Crate> loadCrates(FileConfiguration config) {
+    public static Map<String, Crate> loadCrates(ConfigurationSection config) {
         Map<String, Crate> crates = new HashMap<>();
 
         for (String crateKey : config.getKeys(false)) {

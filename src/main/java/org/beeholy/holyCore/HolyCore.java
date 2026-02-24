@@ -13,6 +13,7 @@ import org.beeholy.holyCore.items.Vouchers;
 import org.beeholy.holyCore.listeners.*;
 import org.beeholy.holyCore.listeners.enchants.BookListeners;
 import org.beeholy.holyCore.listeners.enchants.BreakToolListeners;
+import org.beeholy.holyCore.listeners.enchants.StatusEffectListeners;
 import org.beeholy.holyCore.listeners.enchants.TelekinesisListeners;
 import org.beeholy.holyCore.utility.*;
 import org.bukkit.Bukkit;
@@ -20,7 +21,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import java.awt.print.Book;
 import java.util.Map;
 
 public final class HolyCore extends JavaPlugin {
@@ -61,7 +61,7 @@ public final class HolyCore extends JavaPlugin {
         Commands.registerCommands(this);
 
         // Register events
-        Bukkit.getPluginManager().registerEvents(new PlayerJoinListener(), this);
+        Bukkit.getPluginManager().registerEvents(new PlayerJoinLeaveListener(), this);
         Bukkit.getPluginManager().registerEvents(new ChatListener(), this);
         Bukkit.getPluginManager().registerEvents(new GuiListeners(), this);
         Bukkit.getPluginManager().registerEvents(new VoucherListeners(), this);
@@ -77,6 +77,7 @@ public final class HolyCore extends JavaPlugin {
         Bukkit.getPluginManager().registerEvents(new BookListeners(), this);
         Bukkit.getPluginManager().registerEvents(new TelekinesisListeners(), this);
         Bukkit.getPluginManager().registerEvents(new BreakToolListeners(), this);
+        Bukkit.getPluginManager().registerEvents(new StatusEffectListeners(), this);
 
         // Rank priority using luckperms api
         LuckPerms luckPerms = LuckPermsProvider.get();

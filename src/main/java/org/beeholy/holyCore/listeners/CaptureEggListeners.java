@@ -13,6 +13,8 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
+import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.*;
 import org.bukkit.event.Event;
@@ -113,15 +115,28 @@ public class CaptureEggListeners implements Listener {
         Material material = Bukkit.getItemFactory().getSpawnEgg(entity.getType());
         if (material == null) return;
 
+
         ItemStack newItem = new ItemStack(material);
         entity.remove();
+
         meta.getPersistentDataContainer().set(key, PersistentDataType.BOOLEAN, false);
         TextReplacementConfig config = TextReplacementConfig
                 .builder()
-                .match("(?:ʀᴇᴜѕᴀʙʟᴇ|ѕɪɴɢʟᴇ ᴜѕᴇ)").replacement(TextUtils.toSmallText(entity.getType().name())).build();
+                .match("(?:ʀᴇᴜѕᴀʙʟᴇ|ѕɪɴɢʟᴇ ᴜѕᴇ)").replacement(TextUtils.toSmallText(entity.getType().name()))
+                .build();
 
-        meta.displayName(meta.displayName().replaceText(config))
-        ;
+        NamespacedKey reusableKey = new NamespacedKey(HolyCore.getInstance(), "capture_egg_reusable");
+        Boolean isReusable = meta.getPersistentDataContainer().get(reusableKey, PersistentDataType.BOOLEAN);
+
+        meta.displayName(meta.displayName().replaceText(config));
+
+        if(Boolean.TRUE.equals(isReusable)) {
+            meta.displayName(meta.displayName()
+                    .replaceText(builder->
+                            builder.match("Mob")
+                                    .replacement(Component.text("Reusable"))));
+        }
+
         meta.lore(lore);
         newItem.setItemMeta(meta);
 
@@ -150,31 +165,41 @@ public class CaptureEggListeners implements Listener {
             return;
         };
         // It is spawn egg, our behaviour
+
+
         e.setCancelled(true);
-        if (e.getAction() == Action.RIGHT_CLICK_BLOCK) {
 
-            meta.getSpawnedEntity();
-            //Location spawnLoc = e.getClickedBlock().getLocation().add(0,1,0);
-            Location spawnLoc = e.getInteractionPoint();
-            Location locPlus1 = spawnLoc.clone().add(0, 1, 0);
-            if(locPlus1.getBlock().isSuffocating()) return;
+        if (e.getAction() != Action.RIGHT_CLICK_BLOCK) return;
 
-            // Spawn and decrement the amount
+        Block clicked = e.getClickedBlock();
+        BlockFace face = e.getBlockFace();
+        if (clicked == null || face == null) return;
 
-            meta.getSpawnedEntity().createEntity(spawnLoc);
-            mainhand.setAmount(mainhand.getAmount() - 1);
+// Spawn in the adjacent block space
+        Location spawnLoc = clicked.getRelative(face).getLocation().add(0.5, 0, 0.5);
 
-            NamespacedKey reusableKey = new NamespacedKey(HolyCore.getInstance(), "capture_egg_reusable");
-            Boolean isReusable = meta.getPersistentDataContainer().get(reusableKey, PersistentDataType.BOOLEAN);
-            if(isReusable == null) return;
-            if(isReusable) {
-                ItemStack newItem = ItemFactory.createMobCaptureEgg(true);
-                if (mainhand.getAmount() == 0) {
-                    p.getInventory().setItemInMainHand(newItem);
-                } else {
-                    p.give(newItem);
-                }
+// Check headroom (2 blocks tall entities)
+        if (spawnLoc.getBlock().isSolid()) return;
+        if (spawnLoc.clone().add(0, 1, 0).getBlock().isSolid()) return;
+
+// Spawn entity
+        meta.getSpawnedEntity().createEntity(spawnLoc);
+
+// Consume item
+        mainhand.setAmount(mainhand.getAmount() - 1);
+
+// Reusable logic
+        NamespacedKey reusableKey = new NamespacedKey(HolyCore.getInstance(), "capture_egg_reusable");
+        Boolean isReusable = meta.getPersistentDataContainer().get(reusableKey, PersistentDataType.BOOLEAN);
+
+        if (Boolean.TRUE.equals(isReusable)) {
+            ItemStack newItem = ItemFactory.createMobCaptureEgg(true);
+            if (mainhand.getAmount() == 0) {
+                p.getInventory().setItemInMainHand(newItem);
+            } else {
+                p.getInventory().addItem(newItem);
             }
         }
+
     }
 }

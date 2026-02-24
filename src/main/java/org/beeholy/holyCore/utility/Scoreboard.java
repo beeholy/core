@@ -91,6 +91,9 @@ public class Scoreboard {
         removeScore(player);
     }
 
+    public static void removeHidden(Player player) {
+        scoreHidden.remove(player.getUniqueId());
+    }
     public static void showScore(Player player) {
         scoreHidden.remove(player.getUniqueId());
         createScore(player);

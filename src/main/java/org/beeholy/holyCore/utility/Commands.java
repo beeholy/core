@@ -7,6 +7,7 @@ import org.beeholy.holyCore.commands.*;
 import org.beeholy.holyCore.commands.admin.*;
 import org.beeholy.holyCore.commands.style.ColorCommand;
 import org.beeholy.holyCore.commands.style.GradientCommand;
+import org.beeholy.holyCore.commands.style.HideRankCommand;
 import org.beeholy.holyCore.commands.style.TagCommand;
 import org.beeholy.holyCore.commands.user.FlyCommand;
 import org.beeholy.holyCore.commands.user.QuestCommand;
@@ -47,7 +48,10 @@ public class Commands {
             commands.register("item", "Item factory commands", new ItemCommand());
             commands.register("quest", "Quest commands", new QuestCommand());
             commands.register("meta", "Player meta commands", new MetaCommand());
-            commands.register("scoreboard", "Scoreboard toggle", new ScoreboardCommand());
+            commands.register("sb", "Scoreboard toggle", new ScoreboardCommand());
+            commands.register("hiderank", "Hide rank toggle", new HideRankCommand());
+
+
 
             for (String command : commandsConfig.getKeys(false)) {
                 String permission = commandsConfig.getString(command + ".permission");

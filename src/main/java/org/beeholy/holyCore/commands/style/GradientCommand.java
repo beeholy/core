@@ -29,7 +29,8 @@ public class GradientCommand implements BasicCommand {
                     "gradient",
                     "gradient_name",
                     pp,
-                    "<gradients:<data>><data></reset>");
+                    "<gradients:<data>><data></reset>",
+                    "gradient_tag");
             pp.openInventory(menu.getInventory());
             return;
         }

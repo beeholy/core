@@ -81,6 +81,14 @@ public class PAPIExpansion extends PlaceholderExpansion {
             }
         }
 
+        if(params.toLowerCase().equals("tag")){
+            if(player.isOnline()) {
+                return Tags.getPlayerTag((Player) player);
+            } else {
+                return "";
+            }
+        }
+
         if(params.toLowerCase().equals("envoy")){
             String nextEnvoy = PlaceholderAPI.setPlaceholders(player, "%axenvoy_nextstart_default%");
             String amountLeft = PlaceholderAPI.setPlaceholders(player, "%axenvoy_remaining_default%");

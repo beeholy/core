@@ -29,7 +29,8 @@ public class TagCommand implements BasicCommand {
                     "tag",
                     "tag_name",
                     pp,
-                    "<tags:<data>/>");
+                    "<tags:<data>/>",
+                    "white_tag");
             pp.openInventory(menu.getInventory());
             return;
         }

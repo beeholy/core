@@ -35,6 +35,7 @@ public class ItemFactory {
         }
         return item;
     }
+
     public static ItemStack createMobCaptureEgg(boolean reusable){
         ItemStack item = new ItemStack(Material.GHAST_SPAWN_EGG);
         ItemMeta meta = item.getItemMeta();

@@ -1,6 +1,7 @@
 package org.beeholy.holyCore.listeners.enchants;
 
 
+import com.destroystokyo.paper.MaterialSetTag;
 import io.papermc.paper.entity.PlayerGiveResult;
 import io.papermc.paper.event.block.BlockBreakProgressUpdateEvent;
 import io.papermc.paper.event.block.PlayerShearBlockEvent;
@@ -44,6 +45,10 @@ public class TelekinesisListeners implements Listener {
             NamespacedKey.fromString("holymc:glasscutter")
     );
 
+    Enchantment treeFeller = Registry.ENCHANTMENT.get(
+            NamespacedKey.fromString("holymc:treefeller")
+    );
+
     private void giveOrDrop(Player player, Location location, List<ItemStack> items){
         for(ItemStack i : items) {
             PlayerGiveResult result = player.give(Collections.singleton(i), false);
@@ -78,6 +83,10 @@ public class TelekinesisListeners implements Listener {
         };
     }
 
+    private boolean isLogBlock(Material material){
+        return MaterialSetTag.LOGS.isTagged(material);
+    }
+
     private HashSet<Block> getOreBlocks(Location loc, int amount) {
         HashSet<Block> blocks = new HashSet<>(Set.of(loc.getBlock()));
         HashSet<Block> newestBlocks = new HashSet<>(Set.of(loc.getBlock()));
@@ -102,18 +111,48 @@ public class TelekinesisListeners implements Listener {
         return blocks;
     }
 
-    private HashSet<Block> getSurroundingBlocks(Location loc) {
-        HashSet<Block> locations = new HashSet<>();
+    private HashSet<Block> getLogBlocks(Location loc, int amount) {
+        HashSet<Block> blocks = new HashSet<>(Set.of(loc.getBlock()));
+        HashSet<Block> newestBlocks = new HashSet<>(Set.of(loc.getBlock()));
 
-        locations.add(loc.clone().add(0,1,0).getBlock());
-        locations.add(loc.clone().add(0,-1,0).getBlock());
-        locations.add(loc.clone().add(1,0,0).getBlock());
-        locations.add(loc.clone().add(-1,0,0).getBlock());
-        locations.add(loc.clone().add(0,0,1).getBlock());
-        locations.add(loc.clone().add(0,0,-1).getBlock());
+        int depth = 0;
 
-        return locations;
+        while (depth < amount) {
+            HashSet<Block> tempBlocks = new HashSet<>();
+
+            for (Block block1 : newestBlocks) {
+                for (Block block : getSurroundingBlocks(block1.getLocation())) {
+                    if (!blocks.contains(block) && isLogBlock(block.getType())) tempBlocks.add(block);
+                }
+            }
+
+            blocks.addAll(tempBlocks);
+            newestBlocks = tempBlocks;
+
+            ++depth;
+        }
+
+        return blocks;
     }
+
+    private HashSet<Block> getSurroundingBlocks(Location loc) {
+        HashSet<Block> blocks = new HashSet<>();
+
+        for (int x = -1; x <= 1; x++) {
+            for (int y = -1; y <= 1; y++) {
+                for (int z = -1; z <= 1; z++) {
+
+                    // Skip the center block itself
+                    if (x == 0 && y == 0 && z == 0) continue;
+
+                    blocks.add(loc.clone().add(x, y, z).getBlock());
+                }
+            }
+        }
+
+        return blocks;
+    }
+
 
     private HashSet<Block> getBlocks(Location loc, BlockFace blockFace, Integer depth) {
         Location loc2 = loc.clone();
@@ -175,8 +214,10 @@ public class TelekinesisListeners implements Listener {
 
         return blockList;
     }
+
     private final Map<UUID, BlockFace> lastBrokenFace = new HashMap<>();
     private final Map<UUID, Material> lastMaterial = new HashMap<>();
+    private final Map<UUID, Location> lastLocationBroken = new HashMap<>();
 
     @EventHandler
     public void onPlayerInteract(PlayerInteractEvent e) {
@@ -184,12 +225,65 @@ public class TelekinesisListeners implements Listener {
             Player player = e.getPlayer();
             lastBrokenFace.put(player.getUniqueId(), e.getBlockFace());
             lastMaterial.put(player.getUniqueId(), e.getClickedBlock().getType());
+            lastLocationBroken.put(player.getUniqueId(), e.getClickedBlock().getLocation());
         }
     }
 
     @EventHandler
     public void onBlockBreak(BlockBreakEvent e) {
         if (e.isCancelled()) return;
+        Player player = e.getPlayer();
+
+        if(e.getBlock().getLocation().equals(lastLocationBroken.get(player.getUniqueId()))){
+
+            ItemStack usedItem = player.getInventory().getItemInMainHand();
+            BlockFace blockFace = lastBrokenFace.get(player.getUniqueId());
+            Location location = e.getBlock().getLocation();
+
+            // Three Break
+            if(usedItem.getEnchantments().containsKey(threeBreak)){
+
+                HashSet<Block> blocks = getBlocks(location, blockFace, usedItem.getEnchantmentLevel(threeBreak) - 1);
+
+                for(Block block : blocks) {
+                    if(!block.getLocation().equals(lastLocationBroken.get(player.getUniqueId()))) {
+                        if (block.getType() == lastMaterial.get(player.getUniqueId())) {
+                            player.breakBlock(block);
+                        }
+                    }
+                }
+            }
+            // Vein Miner
+            if(usedItem.getEnchantments().containsKey(veinMiner)){
+
+                if(isOreBlock(lastMaterial.get(player.getUniqueId()))) {
+                    HashSet<Block> blocks = getOreBlocks(location, usedItem.getEnchantmentLevel(veinMiner));
+
+                    for(Block block : blocks) {
+                        if(!block.getLocation().equals(lastLocationBroken.get(player.getUniqueId()))) {
+                            if (block.getType() == lastMaterial.get(player.getUniqueId())) {
+                                player.breakBlock(block);
+                            }
+                        }
+                    }
+                }
+            }
+
+            if(usedItem.getEnchantments().containsKey(treeFeller)){
+
+                if(isLogBlock(lastMaterial.get(player.getUniqueId()))) {
+                    HashSet<Block> blocks = getLogBlocks(location, usedItem.getEnchantmentLevel(treeFeller));
+
+                    for(Block block : blocks) {
+                        if(!block.getLocation().equals(lastLocationBroken.get(player.getUniqueId()))) {
+                            if (block.getType() == lastMaterial.get(player.getUniqueId())) {
+                                player.breakBlock(block);
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
 
     @EventHandler
@@ -239,44 +333,6 @@ public class TelekinesisListeners implements Listener {
         Location location = e.getBlock().getLocation();
 
 
-        if(usedItem.getEnchantments().containsKey(threeBreak)){
-
-            HashSet<Block> blocks = getBlocks(location, blockFace, usedItem.getEnchantmentLevel(threeBreak) - 1);
-
-            for(Block block : blocks) {
-                if (block.getType() == lastMaterial.get(player.getUniqueId())) {
-
-                    itemDrops.addAll(block.getDrops(usedItem));
-
-                    block.setType(Material.AIR);
-
-                    if(usedItem.getItemMeta() instanceof Damageable damageable){
-                        damageable.setDamage(damageable.getDamage() - 1);
-                    }
-                }
-            }
-        }
-        // Vein Miner
-
-        if(usedItem.getEnchantments().containsKey(veinMiner)){
-
-            Bukkit.getLogger().info(lastMaterial.get(player.getUniqueId()).toString());
-            if(isOreBlock(lastMaterial.get(player.getUniqueId()))) {
-                HashSet<Block> blocks = getOreBlocks(location, usedItem.getEnchantmentLevel(veinMiner));
-
-                for (Block block : blocks) {
-
-                    itemDrops.addAll(block.getDrops(usedItem));
-                    block.setType(Material.AIR);
-
-                    if (usedItem.getItemMeta() instanceof Damageable damageable) {
-                        damageable.setDamage(damageable.getDamage() - 1);
-                    }
-                }
-            }
-        }
-
-
         if(usedItem.getEnchantments().containsKey(autoSmelt)) {
 
             int level = usedItem.getEnchantmentLevel(autoSmelt);
@@ -316,9 +372,9 @@ public class TelekinesisListeners implements Listener {
 
         // Telekinesis Handling (handle Last) - put in inv or drop
         if(usedItem.getEnchantments().containsKey(telekinesis)){
-            giveOrDrop(player, e.getBlock().getLocation(), itemDrops);
+            giveOrDrop(player, location, itemDrops);
         } else {
-            dropItems(e.getBlock().getLocation(), itemDrops);
+            dropItems(location, itemDrops);
         }
         e.getItems().clear();
     }

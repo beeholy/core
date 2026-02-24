@@ -8,13 +8,16 @@ import net.kyori.adventure.text.event.HoverEvent;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.serializer.json.JSONComponentSerializer;
+import org.beeholy.holyCore.HolyCore;
 import org.beeholy.holyCore.utility.Language;
 import org.beeholy.holyCore.utility.TextUtils;
+import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.persistence.PersistentDataType;
 
 public class ChatListener implements Listener, ChatRenderer { // Implement the ChatRenderer and Listener interface
 
@@ -32,13 +35,39 @@ public class ChatListener implements Listener, ChatRenderer { // Implement the C
         ItemStack heldItem = source.getInventory().getItemInMainHand();
         Component newMessage = message;
         int heldAmount = heldItem.getAmount();
-        if(heldAmount != 0) {
-            Component amountComponent = Component.text(heldAmount + "x").color(NamedTextColor.GOLD);
-            Component replacedItem = amountComponent
-                    .append(heldItem.displayName())
-                    .hoverEvent(heldItem.asHoverEvent());
-            newMessage = message.replaceText(builder -> builder.match("\\[i\\]").replacement(replacedItem));
+
+        NamespacedKey key = new NamespacedKey(HolyCore.getInstance(), "hiddenRank");
+        if(source.getPersistentDataContainer().has(key)){
+            String withoutTagFormat = Language.get("chat_format").replace("<player_rank>", "");
+            message =  TextUtils.deserializeAsPlayer(withoutTagFormat, source, newMessage);
+        } else {
+            message = TextUtils.deserializeAsPlayer(Language.get("chat_format"), source, newMessage);
         }
-        return TextUtils.deserializeAsPlayer(Language.get("chat_format"), source, newMessage);
+        Component replacedItem;
+        if (heldAmount >= 1) {
+
+            if (heldAmount > 1) {
+                replacedItem =
+                                Component.text("[" + heldAmount + "x", NamedTextColor.GRAY)
+                                .append(heldItem.displayName())
+                                .append(Component.text("]", NamedTextColor.GRAY))
+                                .hoverEvent(heldItem.asHoverEvent());
+            } else if(heldAmount == 1){
+                replacedItem = heldItem.displayName()
+                                .hoverEvent(heldItem.asHoverEvent());
+            } else {
+                replacedItem = null;
+            }
+
+            newMessage = message.replaceText(builder ->
+                    builder.matchLiteral("[i]").replacement(replacedItem)
+            );
+        } else {
+            replacedItem = null;
+            newMessage = message;
+        }
+
+        return newMessage;
+
     }
 }

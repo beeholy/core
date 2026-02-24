@@ -28,10 +28,7 @@ public class SpawnerPickListners implements Listener {
         boolean hasPickMain = mainHand != null && mainHand.getItemMeta() != null &&
                 mainHand.getItemMeta().getPersistentDataContainer().has(pickKey, PersistentDataType.BYTE);
 
-        boolean hasPickOff = offHand != null && offHand.getItemMeta() != null &&
-                offHand.getItemMeta().getPersistentDataContainer().has(pickKey, PersistentDataType.BYTE);
-
-        if (!hasPickMain && !hasPickOff) return;
+        if (!hasPickMain) return;
 
         CreatureSpawner spawner = (CreatureSpawner) block.getState();
         EntityType type = spawner.getSpawnedType();
@@ -42,19 +39,14 @@ public class SpawnerPickListners implements Listener {
         if (meta != null) {
             NamespacedKey typeKey = new NamespacedKey(HolyCore.getInstance(), "spawner_type");
             meta.getPersistentDataContainer().set(typeKey, PersistentDataType.STRING, type.name());
-            meta.displayName(TextUtils.deserialize("<italic:false><gold>" + type.name().charAt(0) + type.name().substring(1).toLowerCase() + " Spawner</gold>"));
+            meta.displayName(TextUtils.deserialize("<italic:false><gold>" + TextUtils.prettifyEnum(type) + " Spawner</gold>"));
             spawnerItem.setItemMeta(meta);
         }
 
-        block.getWorld().dropItemNaturally(block.getLocation(), spawnerItem);
         event.setExpToDrop(0);
 
         // Remove the pickaxe used
-        if (hasPickMain) {
-            event.getPlayer().getInventory().setItemInMainHand(null);
-        } else {
-            event.getPlayer().getInventory().setItemInOffHand(null);
-        }
+        event.getPlayer().getInventory().setItemInMainHand(spawnerItem);
     }
 
     @EventHandler

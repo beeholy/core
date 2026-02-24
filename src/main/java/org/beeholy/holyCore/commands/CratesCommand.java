@@ -23,9 +23,17 @@ public class CratesCommand implements BasicCommand {
     public void giveKey(Player player, String crateName, int amount) {
         Crate crate = Crates.getCrates().get(crateName);
 
+        if(Crates.isWorldBanned(player.getWorld())){
+            Bukkit.getScheduler().runTaskAsynchronously(HolyCore.getInstance(), () -> {
+                DBManager db = DBManager.getInstance();
+                db.addCratesClaim(player.getUniqueId(), crateName, amount);
+            });
+            player.sendMessage(TextUtils.deserialize(Language.get("crates_give_banned"), String.valueOf(amount), crate.getName()));
+            return;
+        }
         ItemStack key = crate.getKeyItem();
         key.setAmount(amount);
-
+        // If banned world, put into claim inv
         PlayerGiveResult given = player.give(List.of(key), false);
         player.sendMessage(TextUtils.deserialize(Language.get("crate_keys_given"), String.valueOf(amount), crate.getName()));
         Collection<ItemStack> leftover = given.leftovers();
@@ -42,6 +50,10 @@ public class CratesCommand implements BasicCommand {
 
     public void claimKeys(Player player) {
         UUID uuid = player.getUniqueId();
+        if(Crates.isWorldBanned(player.getWorld())){
+            player.sendMessage(TextUtils.deserialize(Language.get("crates_claim_banned")));
+            return;
+        }
         Bukkit.getScheduler().runTaskAsynchronously(HolyCore.getInstance(), () -> {
             DBManager db = DBManager.getInstance();
             Map<String, Integer> crates = db.getCratesClaims(uuid);

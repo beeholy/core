@@ -17,8 +17,11 @@ import org.beeholy.holyCore.economy.FlyTime;
 import org.beeholy.holyCore.hooks.VaultHook;
 import org.bukkit.entity.Player;
 
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class TextUtils {
 
@@ -44,6 +47,11 @@ public class TextUtils {
         return result.toString();
     }
 
+    public static String prettifyEnum(Enum<?> e) {
+        return Arrays.stream(e.name().toLowerCase(Locale.ROOT).split("_"))
+                .map(s -> s.substring(0, 1).toUpperCase() + s.substring(1))
+                .collect(Collectors.joining(" "));
+    }
 
     static Tag colorsTag(final ArgumentQueue args, final Context ctx) {
         final String colorName = args.popOr("The <colors> tag requires exactly one argument, the name.").value();
@@ -84,7 +92,6 @@ public class TextUtils {
                         .tag("display_name", Tag.inserting(player.displayName()))
                         .build())
                 .build();
-
         return mm.deserialize(PlaceholderAPI.setPlaceholders(player, message));
     }
 

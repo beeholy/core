@@ -17,6 +17,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.inventory.meta.components.CustomModelDataComponent;
 import org.bukkit.persistence.PersistentDataType;
 
 import java.util.List;
@@ -26,13 +27,15 @@ public class PermissionMenu extends PaginatedMenu<String> {
     private final String permission;
     private final Player player;
     private final String displayName;
+    private final String tagModel;
 
-    public PermissionMenu(Component title, String permission, String key, Player player, String displayName) {
+    public PermissionMenu(Component title, String permission, String key, Player player, String displayName, String tagModel) {
         super(title, 36, List.of());
         this.permission = permission;
         this.player = player;
         this.key = new NamespacedKey(HolyCore.getInstance(), key);
         this.displayName = displayName;
+        this.tagModel = tagModel;
         var items = PlayerData.getPlayerPermissionList(player, permission);
 
         switch (permission) {
@@ -65,6 +68,11 @@ public class PermissionMenu extends PaginatedMenu<String> {
         ItemStack item = new ItemStack(Material.NAME_TAG);
         ItemMeta meta = item.getItemMeta();
         MiniMessage mm = MiniMessage.miniMessage();
+
+        CustomModelDataComponent modelDataComponent = meta.getCustomModelDataComponent();
+        modelDataComponent.setStrings(List.of(tagModel));
+        meta.setCustomModelDataComponent(modelDataComponent);
+
         meta.displayName(TextUtils.deserialize(displayName, data).decorationIfAbsent(TextDecoration.ITALIC, TextDecoration.State.FALSE));
         meta.lore(List.of(
                 Component.empty(),

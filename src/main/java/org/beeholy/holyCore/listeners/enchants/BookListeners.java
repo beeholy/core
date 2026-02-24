@@ -1,5 +1,6 @@
 package org.beeholy.holyCore.listeners.enchants;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
@@ -21,17 +22,23 @@ public class BookListeners implements Listener {
     public void onInventoryClick(InventoryClickEvent e) {
         if (!(e.getWhoClicked() instanceof Player player)) return;
 
+        if(e.isCancelled()) return;
+
+        if(!player.hasPermission("holy.guienchant")) return;
+
         ItemStack cursor = e.getCursor();
         ItemStack clicked = e.getCurrentItem();
 
         if (cursor == null || clicked == null) return;
-        if (!clicked.hasItemMeta()) return;
+        //if (!clicked.hasItemMeta()) return;
 
+        //Bukkit.getLogger().info(cursor.getType().toString() + " - " + clicked.getType().toString());
         // =====================================================
         // 📕 BOOK → EXTRACT RANDOM ENCHANT FROM ITEM
         // =====================================================
         if (cursor.getType() == Material.BOOK) {
 
+            if(!clicked.hasItemMeta()) return;
             Map<Enchantment, Integer> enchants =
                     clicked.getItemMeta().getEnchants();
 
@@ -69,7 +76,9 @@ public class BookListeners implements Listener {
 
             // Consume book & give result
             cursor.setAmount(cursor.getAmount() - 1);
-            player.give(cursor);
+            if (cursor.getAmount() != 0) {
+                player.give(cursor);
+            }
             player.setItemOnCursor(enchantedBook);
             return;
         }
@@ -85,7 +94,7 @@ public class BookListeners implements Listener {
             Map<Enchantment, Integer> stored = bookMeta.getStoredEnchants();
             if (stored.isEmpty()) return;
 
-            e.setCancelled(true);
+            //e.setCancelled(true);
 
             ItemMeta itemMeta = clicked.getItemMeta();
 
@@ -109,12 +118,16 @@ public class BookListeners implements Listener {
             if (conflicts) return;
 
             // Apply enchant safely
-            itemMeta.addEnchant(enchantment, level, false);
+            itemMeta.addEnchant(enchantment, level, true);
             clicked.setItemMeta(itemMeta);
 
             // Consume enchanted book
-            cursor.setAmount(cursor.getAmount() - 1);
-            if (cursor.getAmount() <= 0) {
+            if(storedEntries.size() > 1){
+                ItemStack enchantedBook = ItemStack.of(Material.ENCHANTED_BOOK);
+                bookMeta.removeStoredEnchant(enchantment);
+                enchantedBook.setItemMeta(bookMeta);
+                player.setItemOnCursor(enchantedBook);
+            } else {
                 player.setItemOnCursor(null);
             }
         }

@@ -95,7 +95,7 @@ public class Tags {
         NamespacedKey key = new NamespacedKey(HolyCore.getInstance(), "tag_name");
         String tagName = player.getPersistentDataContainer().get(key, PersistentDataType.STRING);
         String tag = getTag(tagName);
-        return tagName != null ? tag : "";
+        return tag.isEmpty() ? "" : tag + " ";
     }
 
     public static boolean addTag(String name, String tag){

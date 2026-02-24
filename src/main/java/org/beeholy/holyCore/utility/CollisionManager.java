@@ -16,7 +16,7 @@ import org.bukkit.scoreboard.Team;
             Team team = board.getTeam(TEAM_NAME);
             if (team == null) {
                 team = board.registerNewTeam(TEAM_NAME);
-                team.setOption(Team.Option.COLLISION_RULE, Team.OptionStatus.NEVER);
+                team.setOption(Team.Option.COLLISION_RULE, Team.OptionStatus.ALWAYS);
             }
 
             team.addEntry(player.getName());

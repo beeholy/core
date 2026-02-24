@@ -10,8 +10,9 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 
-public class PlayerJoinListener implements Listener {
+public class PlayerJoinLeaveListener implements Listener {
     private final MiniMessage mm = MiniMessage.miniMessage();
 
     @EventHandler
@@ -41,4 +42,10 @@ public class PlayerJoinListener implements Listener {
         // Set up no collision
         CollisionManager.apply(event.getPlayer());
     }
+
+    @EventHandler
+    public void onPlayerLeave(PlayerQuitEvent e) {
+        Scoreboard.removeHidden(e.getPlayer());
+    }
+
 }

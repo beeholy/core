@@ -59,9 +59,11 @@ public class Bootstrap implements PluginBootstrap {
         });
 
 
-        // Telekinesis registration
+        // Tools
         TypedKey<Enchantment> Telekinesis = EnchantmentKeys.create(Key.key("holymc:telekinesis"));
-        // 3x3 Break
+
+        TypedKey<Enchantment> Reach = EnchantmentKeys.create(Key.key("holymc:reach"));
+
         TypedKey<Enchantment> ThreeBreak = EnchantmentKeys.create(Key.key("holymc:threebreak"));
 
         TypedKey<Enchantment> VeinMiner = EnchantmentKeys.create(Key.key("holymc:veinminer"));
@@ -70,6 +72,14 @@ public class Bootstrap implements PluginBootstrap {
 
         TypedKey<Enchantment> GlassCutter = EnchantmentKeys.create(Key.key("holymc:glasscutter"));
 
+        TypedKey<Enchantment> TreeFeller = EnchantmentKeys.create(Key.key("holymc:treefeller"));
+
+        // Armour
+        TypedKey<Enchantment> Glowing = EnchantmentKeys.create(Key.key("holymc:glowing"));
+        TypedKey<Enchantment> Aquatic = EnchantmentKeys.create(Key.key("holymc:aquatic"));
+
+        TypedKey<Enchantment> Speed = EnchantmentKeys.create(Key.key("holymc:speed"));
+        TypedKey<Enchantment> Springs = EnchantmentKeys.create(Key.key("holymc:springs"));
 
         context.getLifecycleManager().registerEventHandler(RegistryEvents.ENCHANTMENT.compose().newHandler(event -> {
             event.registry().register(
@@ -83,12 +93,23 @@ public class Bootstrap implements PluginBootstrap {
                             .maximumCost(EnchantmentRegistryEntry.EnchantmentCost.of(3, 1))
                             .activeSlots(EquipmentSlotGroup.MAINHAND)
             );
+            event.registry().register(
+                    Reach,
+                    b -> b.description(Component.text("Reach"))
+                            .supportedItems(event.getOrCreateTag(ItemTypeTagKeys.create(Key.key("holymc:tools"))))
+                            .anvilCost(25)
+                            .maxLevel(3)
+                            .weight(10)
+                            .minimumCost(EnchantmentRegistryEntry.EnchantmentCost.of(1, 1))
+                            .maximumCost(EnchantmentRegistryEntry.EnchantmentCost.of(3, 1))
+                            .activeSlots(EquipmentSlotGroup.MAINHAND)
+            );
 
             event.registry().register(
                     ThreeBreak,
                     b -> b.description(Component.text("3 x 3 Break"))
                             .supportedItems(event.getOrCreateTag(ItemTypeTagKeys.create(Key.key("holymc:tools"))))
-                            .anvilCost(30)
+                            .anvilCost(25)
                             .maxLevel(3)
                             .weight(10)
                             .minimumCost(EnchantmentRegistryEntry.EnchantmentCost.of(1, 10))
@@ -108,7 +129,7 @@ public class Bootstrap implements PluginBootstrap {
                     b -> b.description(Component.text("Vein Miner"))
                             .supportedItems(event.getOrCreateTag(ItemTypeTagKeys.PICKAXES))
                             .anvilCost(10)
-                            .maxLevel(10)
+                            .maxLevel(5)
                             .weight(10)
                             .minimumCost(EnchantmentRegistryEntry.EnchantmentCost.of(1, 10))
                             .maximumCost(EnchantmentRegistryEntry.EnchantmentCost.of(3, 10))
@@ -122,10 +143,22 @@ public class Bootstrap implements PluginBootstrap {
             );
 
             event.registry().register(
+                    TreeFeller,
+                    b -> b.description(Component.text("Tree Feller"))
+                            .supportedItems(event.getOrCreateTag(ItemTypeTagKeys.AXES))
+                            .anvilCost(10)
+                            .maxLevel(5)
+                            .weight(10)
+                            .minimumCost(EnchantmentRegistryEntry.EnchantmentCost.of(1, 10))
+                            .maximumCost(EnchantmentRegistryEntry.EnchantmentCost.of(3, 10))
+                            .activeSlots(EquipmentSlotGroup.MAINHAND)
+            );
+
+            event.registry().register(
                     AutoSmelt,
                     b -> b.description(Component.text("Auto Smelt"))
                             .supportedItems(event.getOrCreateTag(ItemTypeTagKeys.PICKAXES))
-                            .anvilCost(40)
+                            .anvilCost(20)
                             .maxLevel(4)
                             .weight(10)
                             .minimumCost(EnchantmentRegistryEntry.EnchantmentCost.of(1, 10))
@@ -143,12 +176,59 @@ public class Bootstrap implements PluginBootstrap {
                     GlassCutter,
                     b -> b.description(Component.text("Glass Cutter"))
                             .supportedItems(event.getOrCreateTag(ItemTypeTagKeys.create(Key.key("holymc:shears"))))
-                            .anvilCost(40)
+                            .anvilCost(10)
                             .maxLevel(3)
                             .weight(10)
                             .minimumCost(EnchantmentRegistryEntry.EnchantmentCost.of(1, 10))
                             .maximumCost(EnchantmentRegistryEntry.EnchantmentCost.of(3, 10))
                             .activeSlots(EquipmentSlotGroup.MAINHAND)
+            );
+
+            event.registry().register(
+                    Glowing,
+                    b -> b.description(Component.text("Glowing"))
+                            .supportedItems(event.getOrCreateTag(ItemTypeTagKeys.HEAD_ARMOR))
+                            .anvilCost(40)
+                            .maxLevel(1)
+                            .weight(10)
+                            .minimumCost(EnchantmentRegistryEntry.EnchantmentCost.of(1, 10))
+                            .maximumCost(EnchantmentRegistryEntry.EnchantmentCost.of(3, 10))
+                            .activeSlots(EquipmentSlotGroup.ARMOR)
+            );
+
+            event.registry().register(
+                    Aquatic,
+                    b -> b.description(Component.text("Aquatic"))
+                            .supportedItems(event.getOrCreateTag(ItemTypeTagKeys.HEAD_ARMOR))
+                            .anvilCost(40)
+                            .maxLevel(1)
+                            .weight(10)
+                            .minimumCost(EnchantmentRegistryEntry.EnchantmentCost.of(1, 10))
+                            .maximumCost(EnchantmentRegistryEntry.EnchantmentCost.of(3, 10))
+                            .activeSlots(EquipmentSlotGroup.ARMOR)
+            );
+
+            event.registry().register(
+                    Speed,
+                    b -> b.description(Component.text("Speed"))
+                            .supportedItems(event.getOrCreateTag(ItemTypeTagKeys.FOOT_ARMOR))
+                            .anvilCost(10)
+                            .maxLevel(3)
+                            .weight(10)
+                            .minimumCost(EnchantmentRegistryEntry.EnchantmentCost.of(1, 10))
+                            .maximumCost(EnchantmentRegistryEntry.EnchantmentCost.of(3, 10))
+                            .activeSlots(EquipmentSlotGroup.ARMOR)
+            );
+            event.registry().register(
+                    Springs,
+                    b -> b.description(Component.text("Springs"))
+                            .supportedItems(event.getOrCreateTag(ItemTypeTagKeys.FOOT_ARMOR))
+                            .anvilCost(40)
+                            .maxLevel(2)
+                            .weight(10)
+                            .minimumCost(EnchantmentRegistryEntry.EnchantmentCost.of(1, 10))
+                            .maximumCost(EnchantmentRegistryEntry.EnchantmentCost.of(3, 10))
+                            .activeSlots(EquipmentSlotGroup.ARMOR)
             );
 
         }));
