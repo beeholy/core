@@ -24,6 +24,8 @@ public class ReloadCommand implements BasicCommand {
         Scoreboard.reload();
         Quests.reload();
 
+        HolyCore.getInstance().getSkinService().reload();
+
         commandSourceStack.getSender().sendMessage(TextUtils.deserialize(Language.get("config_reload")));
     }
 

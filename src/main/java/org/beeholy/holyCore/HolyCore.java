@@ -1,13 +1,10 @@
 package org.beeholy.holyCore;
 
 import net.kyori.adventure.text.minimessage.MiniMessage;
-import net.luckperms.api.LuckPerms;
-import net.luckperms.api.LuckPermsProvider;
 import org.beeholy.holyCore.chat.Colors;
 import org.beeholy.holyCore.chat.Gradients;
 import org.beeholy.holyCore.chat.Tags;
 import org.beeholy.holyCore.economy.FlyTime;
-import org.beeholy.holyCore.hooks.LPHook;
 import org.beeholy.holyCore.hooks.PAPIExpansion;
 import org.beeholy.holyCore.items.Vouchers;
 import org.beeholy.holyCore.listeners.*;
@@ -15,23 +12,24 @@ import org.beeholy.holyCore.listeners.enchants.BookListeners;
 import org.beeholy.holyCore.listeners.enchants.BreakToolListeners;
 import org.beeholy.holyCore.listeners.enchants.StatusEffectListeners;
 import org.beeholy.holyCore.listeners.enchants.TelekinesisListeners;
+import org.beeholy.holyCore.skins.SkinService;
+import org.beeholy.holyCore.listeners.SkinApplicatorListeners;
 import org.beeholy.holyCore.utility.*;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import java.util.Map;
-
 public final class HolyCore extends JavaPlugin {
 
     private static HolyCore instance;
     private final DBManager dbManager = DBManager.getInstance();
     private final MiniMessage mm = MiniMessage.miniMessage();
+    private SkinService skinService;
 
-    public static HolyCore getInstance() {
-        return instance;
-    }
+
+    public static HolyCore getInstance() { return instance;}
+    public SkinService getSkinService(){return skinService;}
 
     @Override
     public void onEnable() {
@@ -78,15 +76,14 @@ public final class HolyCore extends JavaPlugin {
         Bukkit.getPluginManager().registerEvents(new TelekinesisListeners(), this);
         Bukkit.getPluginManager().registerEvents(new BreakToolListeners(), this);
         Bukkit.getPluginManager().registerEvents(new StatusEffectListeners(), this);
-
-        // Rank priority using luckperms api
-        LuckPerms luckPerms = LuckPermsProvider.get();
-        final Map<String, Integer> rankPriority = LPHook.getRankPriority();
+        Bukkit.getPluginManager().registerEvents(new SkinApplicatorListeners(), this);
 
         if (Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI")) { //
             new PAPIExpansion(this).register(); //
         }
 
+        this.skinService = new SkinService(this);
+        
         // Scheduled task, per second updates
         new BukkitRunnable() {
 
@@ -107,7 +104,6 @@ public final class HolyCore extends JavaPlugin {
         }.runTaskTimer(this, 20L, 20L);
 
     }
-
     @Override
     public void onDisable() {
         // Plugin shutdown logic

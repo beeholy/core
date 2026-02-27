@@ -1,10 +1,16 @@
 package org.beeholy.holyCore.items;
 
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.text.format.TextColor;
+import net.kyori.adventure.text.format.TextDecoration;
+import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.beeholy.holyCore.HolyCore;
+import org.beeholy.holyCore.skins.Skin;
 import org.beeholy.holyCore.utility.TextUtils;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
+import org.bukkit.entity.Item;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.components.CustomModelDataComponent;
@@ -15,6 +21,33 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ItemFactory {
+    public static ItemStack createSkinApplicator(Skin skin){
+        ItemStack itemStack = ItemStack.of(Material.PAPER);
+        ItemMeta meta = itemStack.getItemMeta();
+
+        NamespacedKey applicatorKey = new NamespacedKey(HolyCore.getInstance(), "skin_applicator");
+        meta.getPersistentDataContainer().set(applicatorKey, PersistentDataType.BOOLEAN, true);
+
+        meta.displayName(
+                MiniMessage.miniMessage().deserialize(
+                        skin.getGradient() + skin.getName()
+                ).decoration(TextDecoration.ITALIC, TextDecoration.State.FALSE)
+                        .append(Component.text(" Applicator").color(NamedTextColor.WHITE))
+        );
+
+        meta.lore(List.of(
+                Component.empty(),
+                TextUtils.deserialize("<italic:false><gray>| <white>Drag and drop onto "),
+                TextUtils.deserialize("<italic:false><gray>| <white>your item to apply "),
+                Component.empty()
+        ));
+
+        meta.setItemModel(NamespacedKey.fromString(skin.getId()));
+
+        itemStack.setItemMeta(meta);
+        return itemStack;
+    }
+
     public static ItemStack createSpawnerPick() {
         ItemStack item = new ItemStack(Material.DIAMOND_PICKAXE); // You can choose any item
         ItemMeta meta = item.getItemMeta();

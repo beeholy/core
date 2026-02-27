@@ -94,8 +94,6 @@ public class BookListeners implements Listener {
             Map<Enchantment, Integer> stored = bookMeta.getStoredEnchants();
             if (stored.isEmpty()) return;
 
-            //e.setCancelled(true);
-
             ItemMeta itemMeta = clicked.getItemMeta();
 
             // Pick ONE random stored enchant
@@ -117,6 +115,7 @@ public class BookListeners implements Listener {
 
             if (conflicts) return;
 
+            e.setCancelled(true);
             // Apply enchant safely
             itemMeta.addEnchant(enchantment, level, true);
             clicked.setItemMeta(itemMeta);

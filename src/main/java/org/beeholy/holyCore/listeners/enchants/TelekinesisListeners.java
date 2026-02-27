@@ -58,6 +58,16 @@ public class TelekinesisListeners implements Listener {
             }
         }
     }
+    private List<ItemStack> giveReturnDrops(Player player, List<ItemStack> items){
+        List<ItemStack> returns = List.of();
+        for(ItemStack i : items) {
+            PlayerGiveResult result = player.give(Collections.singleton(i), false);
+            if(!result.leftovers().isEmpty()){
+                returns.add(i);
+            }
+        }
+        return returns;
+    }
 
     private void dropItems(Location location, List<ItemStack> items){
         for(ItemStack i : items) {
@@ -242,7 +252,7 @@ public class TelekinesisListeners implements Listener {
 
             // Three Break
             if(usedItem.getEnchantments().containsKey(threeBreak)){
-
+                if(player.isSneaking()) return;
                 HashSet<Block> blocks = getBlocks(location, blockFace, usedItem.getEnchantmentLevel(threeBreak) - 1);
 
                 for(Block block : blocks) {
@@ -258,13 +268,15 @@ public class TelekinesisListeners implements Listener {
 
                 if(isOreBlock(lastMaterial.get(player.getUniqueId()))) {
                     HashSet<Block> blocks = getOreBlocks(location, usedItem.getEnchantmentLevel(veinMiner));
-
+                    int maxBlocks = 0;
                     for(Block block : blocks) {
                         if(!block.getLocation().equals(lastLocationBroken.get(player.getUniqueId()))) {
+                            if (maxBlocks > 32) return;
                             if (block.getType() == lastMaterial.get(player.getUniqueId())) {
                                 player.breakBlock(block);
                             }
                         }
+                        maxBlocks++;
                     }
                 }
             }
@@ -274,12 +286,15 @@ public class TelekinesisListeners implements Listener {
                 if(isLogBlock(lastMaterial.get(player.getUniqueId()))) {
                     HashSet<Block> blocks = getLogBlocks(location, usedItem.getEnchantmentLevel(treeFeller));
 
+                    int maxBlocks = 0;
                     for(Block block : blocks) {
                         if(!block.getLocation().equals(lastLocationBroken.get(player.getUniqueId()))) {
+                            if (maxBlocks > 64) return;
                             if (block.getType() == lastMaterial.get(player.getUniqueId())) {
                                 player.breakBlock(block);
                             }
                         }
+                        maxBlocks++;
                     }
                 }
             }
@@ -323,12 +338,10 @@ public class TelekinesisListeners implements Listener {
 
 
         // Drops Awarded at end - after processing with telek check
-        ArrayList<ItemStack> itemDrops = e.getItems()
+        List<ItemStack> itemDrops = e.getItems()
                 .stream()
                 .map(Item::getItemStack)
                 .collect(Collectors.toCollection(ArrayList::new));
-
-        BlockFace blockFace = lastBrokenFace.get(player.getUniqueId());
 
         Location location = e.getBlock().getLocation();
 
@@ -371,12 +384,27 @@ public class TelekinesisListeners implements Listener {
 
 
         // Telekinesis Handling (handle Last) - put in inv or drop
+//        if(usedItem.getEnchantments().containsKey(telekinesis)){
+//            giveOrDrop(player, location, itemDrops);
+//        } else {
+//            Item item = e.getItems().get(0);
+//            dropItems(location, itemDrops);
+//        }
+
         if(usedItem.getEnchantments().containsKey(telekinesis)){
-            giveOrDrop(player, location, itemDrops);
-        } else {
-            dropItems(location, itemDrops);
+            List<ItemStack> returns = giveReturnDrops(player, itemDrops);
+            itemDrops.clear();
+            itemDrops.addAll(returns);
         }
-        e.getItems().clear();
+        if(!itemDrops.isEmpty()){
+            Item item = e.getItems().get(0);
+            e.getItems().clear();
+            for(ItemStack itemStack : itemDrops){
+                item.setItemStack(itemStack);
+                e.getItems().add(item);
+            }
+        }
+        //e.getItems().clear();
     }
 
     // Shear Event (for beehive)
@@ -393,9 +421,8 @@ public class TelekinesisListeners implements Listener {
 
             List<ItemStack> items = e.getDrops();
 
-            giveOrDrop(player, e.getBlock().getLocation(), items);
-
             e.getDrops().clear();
+            e.getDrops().addAll(giveReturnDrops(player, items));
         }
     }
 

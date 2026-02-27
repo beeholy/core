@@ -83,7 +83,12 @@ public class TextUtils {
         mm = MiniMessage.builder().tags(TagResolver.builder()
                         .resolver(StandardTags.defaults())
                         .tag("player_tag", Tag.preProcessParsed(Tags.getPlayerTag(player)))
-                        .tag("player_rank", Tag.preProcessParsed(VaultHook.getChat().getPlayerPrefix(player)))
+                        .tag("player_rank", Tag.preProcessParsed(
+                                PlaceholderAPI
+                                        .setPlaceholders(player,
+                                                VaultHook.getChat().getPlayerPrefix(player))
+                                )
+                        )
                         .tag("player_gradient", Tag.preProcessParsed(Gradients.getPlayerGradient(player)))
                         .tag("player_color", Tag.styling(TextColor.fromHexString(Colors.getPlayerColor(player))))
                         .tag("player_flytime", Tag.preProcessParsed(FlyTime.formatSeconds(FlyTime.get(player))))
@@ -107,7 +112,12 @@ public class TextUtils {
                         .resolver(StandardTags.defaults())
                         .tag("data", Tag.inserting(safeChat))
                         .tag("player_tag", Tag.preProcessParsed(Tags.getPlayerTag(player)))
-                        .tag("player_rank", Tag.preProcessParsed(VaultHook.getChat().getPlayerPrefix(player)))
+                        .tag("player_rank", Tag.preProcessParsed(
+                                        PlaceholderAPI
+                                                .setPlaceholders(player,
+                                                        VaultHook.getChat().getPlayerPrefix(player))
+                                )
+                        )
                         .tag("player_gradient", Tag.preProcessParsed(Gradients.getPlayerGradient(player)))
                         .tag("player_color", Tag.styling(TextColor.fromHexString(Colors.getPlayerColor(player))))
                         .tag("player_flytime", Tag.preProcessParsed(FlyTime.formatSeconds(FlyTime.get(player))))

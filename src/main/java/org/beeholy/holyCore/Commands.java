@@ -1,8 +1,7 @@
-package org.beeholy.holyCore.utility;
+package org.beeholy.holyCore;
 
 import io.papermc.paper.plugin.lifecycle.event.LifecycleEventManager;
 import io.papermc.paper.plugin.lifecycle.event.types.LifecycleEvents;
-import org.beeholy.holyCore.HolyCore;
 import org.beeholy.holyCore.commands.*;
 import org.beeholy.holyCore.commands.admin.*;
 import org.beeholy.holyCore.commands.style.ColorCommand;
@@ -50,6 +49,7 @@ public class Commands {
             commands.register("meta", "Player meta commands", new MetaCommand());
             commands.register("sb", "Scoreboard toggle", new ScoreboardCommand());
             commands.register("hiderank", "Hide rank toggle", new HideRankCommand());
+            commands.register("skin", "Hide rank toggle", new SkinCommand());
 
 
 

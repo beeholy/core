@@ -1,0 +1,7 @@
+forest_pickaxe:
+  name: "Forest Pickaxe"
+  custom_model: "forest_pickaxe"
+  gradient: "<gradient:#b98a6e:#97f151>"
+  applies_to:
+    - diamond_pickaxe
+    - netherite_pickaxe
