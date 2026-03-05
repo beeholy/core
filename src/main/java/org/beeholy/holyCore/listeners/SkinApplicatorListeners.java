@@ -1,27 +1,21 @@
 package org.beeholy.holyCore.listeners;
 
+import com.nexomc.nexo.api.NexoItems;
 import org.beeholy.holyCore.HolyCore;
 import org.beeholy.holyCore.items.ItemFactory;
 import org.beeholy.holyCore.skins.Skin;
 import org.beeholy.holyCore.skins.SkinManager;
 import org.beeholy.holyCore.skins.SkinRegistry;
-import org.bukkit.Bukkit;
-import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
-import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ThreadLocalRandom;
+import java.util.Objects;
 
 public class SkinApplicatorListeners implements Listener {
     @EventHandler
@@ -45,7 +39,12 @@ public class SkinApplicatorListeners implements Listener {
 
         if(!cursorMeta.getPersistentDataContainer().has(applicatorKey)) return;
 
-        String customModel = cursorMeta.getItemModel().toString();
+        String model = cursorMeta.getPersistentDataContainer().get(applicatorKey, PersistentDataType.STRING);
+        String cursorModel = cursorMeta.getItemModel().toString();
+
+        if(Objects.equals(model, "")){
+            model = cursorModel;
+        }
 
         SkinManager manager = HolyCore.getInstance().getSkinService().getSkinManager();
         SkinRegistry registry = manager.getRegistry();
@@ -53,22 +52,28 @@ public class SkinApplicatorListeners implements Listener {
         // if model is outside of db, do nothing
         if(clickedMeta == null) return;
         if(clickedMeta.hasItemModel()) {
-            Skin skin = registry.get(clickedMeta.getItemModel().toString());
-            if(skin == registry.get(customModel)) return;
+            Skin skin = registry.get("nexo:" + NexoItems.idFromItem(clicked));
+            Skin cursorSkin = manager.getSkinByModel(model);
+            if(skin == cursorSkin) return;
             if(skin != null){
                 // Item is in our db, apply new skin and return old in applicator
-                if(manager.apply(customModel, clicked)){
+                if(manager.apply(cursorSkin.getId(), clicked)){
                     e.setCancelled(true);
-                    ItemFactory.createSkinApplicator(skin);
-                    player.give(ItemFactory.createSkinApplicator(skin));
-                    cursor.setAmount(cursor.getAmount() - 1);
+                    ItemStack applicator = ItemFactory.createSkinApplicator(skin);
+                    if(cursor.getAmount() == 1){
+                        player.setItemOnCursor(applicator);
+                    } else {
+                        player.give(applicator);
+                        cursor.setAmount(cursor.getAmount() - 1);
+                    }
+
                 }
             }
             // Item is not in our db, do nothing
             return;
         }
         // Decrement 1 from cursor and apply
-        if(manager.apply(customModel, clicked)){
+        if(manager.apply(cursorModel, clicked)){
             e.setCancelled(true);
             cursor.setAmount(cursor.getAmount() - 1);
         }

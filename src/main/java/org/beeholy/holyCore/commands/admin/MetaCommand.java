@@ -6,10 +6,10 @@ import org.bukkit.Bukkit;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
 import org.bukkit.persistence.PersistentDataContainer;
-import org.bukkit.persistence.PersistentDataType;
 import org.jspecify.annotations.Nullable;
 
 import java.util.Collection;
+import java.util.Objects;
 import java.util.Set;
 
 public class MetaCommand implements BasicCommand {
@@ -28,7 +28,7 @@ public class MetaCommand implements BasicCommand {
             if(args.length < 3) return;
             if(args[1].equals("set")) {
                 PersistentDataContainer container = player.getPersistentDataContainer();
-                container.remove(NamespacedKey.fromString(args[2]));
+                container.remove(Objects.requireNonNull(NamespacedKey.fromString(args[2])));
             }
         } else {
             source.getSender().sendMessage("Player isn't online");

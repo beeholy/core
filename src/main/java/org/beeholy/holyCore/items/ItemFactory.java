@@ -2,7 +2,6 @@ package org.beeholy.holyCore.items;
 
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
-import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.beeholy.holyCore.HolyCore;
@@ -10,7 +9,6 @@ import org.beeholy.holyCore.skins.Skin;
 import org.beeholy.holyCore.utility.TextUtils;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
-import org.bukkit.entity.Item;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.components.CustomModelDataComponent;
@@ -26,7 +24,14 @@ public class ItemFactory {
         ItemMeta meta = itemStack.getItemMeta();
 
         NamespacedKey applicatorKey = new NamespacedKey(HolyCore.getInstance(), "skin_applicator");
-        meta.getPersistentDataContainer().set(applicatorKey, PersistentDataType.BOOLEAN, true);
+
+        if(skin.getModel() != "") {
+            meta.getPersistentDataContainer().set(applicatorKey, PersistentDataType.STRING, skin.getModel());
+            meta.setItemModel(NamespacedKey.fromString(skin.getModel()));
+        } else {
+            meta.getPersistentDataContainer().set(applicatorKey, PersistentDataType.STRING, "");
+            meta.setItemModel(NamespacedKey.fromString(skin.getId()));
+        }
 
         meta.displayName(
                 MiniMessage.miniMessage().deserialize(
@@ -35,15 +40,16 @@ public class ItemFactory {
                         .append(Component.text(" Applicator").color(NamedTextColor.WHITE))
         );
 
-        meta.lore(List.of(
-                Component.empty(),
+        ArrayList<Component> lore = new ArrayList<>(List.of(Component.empty(),
                 TextUtils.deserialize("<italic:false><gray>| <white>Drag and drop onto "),
                 TextUtils.deserialize("<italic:false><gray>| <white>your item to apply "),
-                Component.empty()
-        ));
+                Component.empty(),
+                TextUtils.deserialize("<italic:false><gray>Applies to: </gray>")));
 
-        meta.setItemModel(NamespacedKey.fromString(skin.getId()));
-
+        for(Material material : skin.getAppliesTo()){
+            lore.add(TextUtils.deserialize("<italic:false><gray>| </gray><white>" + TextUtils.prettifyEnum(material) + "</white>"));
+        }
+        meta.lore(lore);
         itemStack.setItemMeta(meta);
         return itemStack;
     }

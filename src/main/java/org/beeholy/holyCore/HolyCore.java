@@ -13,7 +13,6 @@ import org.beeholy.holyCore.listeners.enchants.BreakToolListeners;
 import org.beeholy.holyCore.listeners.enchants.StatusEffectListeners;
 import org.beeholy.holyCore.listeners.enchants.TelekinesisListeners;
 import org.beeholy.holyCore.skins.SkinService;
-import org.beeholy.holyCore.listeners.SkinApplicatorListeners;
 import org.beeholy.holyCore.utility.*;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;

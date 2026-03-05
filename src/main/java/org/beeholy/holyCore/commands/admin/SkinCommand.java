@@ -6,21 +6,17 @@ import org.beeholy.holyCore.HolyCore;
 import org.beeholy.holyCore.items.ItemFactory;
 import org.beeholy.holyCore.skins.Skin;
 import org.beeholy.holyCore.skins.SkinManager;
-import org.beeholy.holyCore.utility.Language;
-import org.beeholy.holyCore.utility.TextUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 import org.jspecify.annotations.Nullable;
 
 import java.util.Collection;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class SkinCommand implements BasicCommand {
     @Override

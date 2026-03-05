@@ -8,18 +8,13 @@ import io.papermc.paper.registry.TypedKey;
 import io.papermc.paper.registry.data.EnchantmentRegistryEntry;
 import io.papermc.paper.registry.event.RegistryEvents;
 import io.papermc.paper.registry.keys.EnchantmentKeys;
-import io.papermc.paper.registry.keys.ItemTypeKeys;
-import io.papermc.paper.registry.keys.tags.EnchantmentTagKeys;
 import io.papermc.paper.registry.keys.tags.ItemTypeTagKeys;
-import io.papermc.paper.registry.set.RegistryKeySet;
 import io.papermc.paper.registry.set.RegistrySet;
 import io.papermc.paper.registry.tag.TagKey;
-import io.papermc.paper.tag.PostFlattenTagRegistrar;
 import io.papermc.paper.tag.TagEntry;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.Component;
 import org.bukkit.enchantments.Enchantment;
-import org.bukkit.entity.Item;
 import org.bukkit.inventory.EquipmentSlotGroup;
 import org.bukkit.inventory.ItemType;
 
@@ -74,10 +69,13 @@ public class Bootstrap implements PluginBootstrap {
 
         TypedKey<Enchantment> TreeFeller = EnchantmentKeys.create(Key.key("holymc:treefeller"));
 
+        TypedKey<Enchantment> Harvester = EnchantmentKeys.create(Key.key("holymc:harvester"));
+
+        TypedKey<Enchantment> Replant = EnchantmentKeys.create(Key.key("holymc:replant"));
         // Armour
         TypedKey<Enchantment> Glowing = EnchantmentKeys.create(Key.key("holymc:glowing"));
         TypedKey<Enchantment> Aquatic = EnchantmentKeys.create(Key.key("holymc:aquatic"));
-
+        TypedKey<Enchantment> Overload = EnchantmentKeys.create(Key.key("holymc:overload"));
         TypedKey<Enchantment> Speed = EnchantmentKeys.create(Key.key("holymc:speed"));
         TypedKey<Enchantment> Springs = EnchantmentKeys.create(Key.key("holymc:springs"));
 
@@ -119,7 +117,8 @@ public class Bootstrap implements PluginBootstrap {
                                     RegistryKey.ENCHANTMENT,
                                     List.of(
                                             VeinMiner,
-                                            GlassCutter
+                                            GlassCutter,
+                                            Harvester
                                     )
                             ))
             );
@@ -185,6 +184,30 @@ public class Bootstrap implements PluginBootstrap {
             );
 
             event.registry().register(
+                    Harvester,
+                    b -> b.description(Component.text("Harvester"))
+                            .supportedItems(event.getOrCreateTag(ItemTypeTagKeys.HOES))
+                            .anvilCost(40)
+                            .maxLevel(1)
+                            .weight(10)
+                            .minimumCost(EnchantmentRegistryEntry.EnchantmentCost.of(1, 10))
+                            .maximumCost(EnchantmentRegistryEntry.EnchantmentCost.of(3, 10))
+                            .activeSlots(EquipmentSlotGroup.MAINHAND)
+            );
+
+            event.registry().register(
+                    Replant,
+                    b -> b.description(Component.text("Replant"))
+                            .supportedItems(event.getOrCreateTag(ItemTypeTagKeys.HOES))
+                            .anvilCost(40)
+                            .maxLevel(1)
+                            .weight(10)
+                            .minimumCost(EnchantmentRegistryEntry.EnchantmentCost.of(1, 10))
+                            .maximumCost(EnchantmentRegistryEntry.EnchantmentCost.of(3, 10))
+                            .activeSlots(EquipmentSlotGroup.MAINHAND)
+            );
+
+            event.registry().register(
                     Glowing,
                     b -> b.description(Component.text("Glowing"))
                             .supportedItems(event.getOrCreateTag(ItemTypeTagKeys.HEAD_ARMOR))
@@ -202,6 +225,18 @@ public class Bootstrap implements PluginBootstrap {
                             .supportedItems(event.getOrCreateTag(ItemTypeTagKeys.HEAD_ARMOR))
                             .anvilCost(40)
                             .maxLevel(1)
+                            .weight(10)
+                            .minimumCost(EnchantmentRegistryEntry.EnchantmentCost.of(1, 10))
+                            .maximumCost(EnchantmentRegistryEntry.EnchantmentCost.of(3, 10))
+                            .activeSlots(EquipmentSlotGroup.ARMOR)
+            );
+
+            event.registry().register(
+                    Overload,
+                    b -> b.description(Component.text("Overload"))
+                            .supportedItems(event.getOrCreateTag(ItemTypeTagKeys.CHEST_ARMOR))
+                            .anvilCost(10)
+                            .maxLevel(5)
                             .weight(10)
                             .minimumCost(EnchantmentRegistryEntry.EnchantmentCost.of(1, 10))
                             .maximumCost(EnchantmentRegistryEntry.EnchantmentCost.of(3, 10))

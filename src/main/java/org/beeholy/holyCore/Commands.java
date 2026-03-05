@@ -2,7 +2,8 @@ package org.beeholy.holyCore;
 
 import io.papermc.paper.plugin.lifecycle.event.LifecycleEventManager;
 import io.papermc.paper.plugin.lifecycle.event.types.LifecycleEvents;
-import org.beeholy.holyCore.commands.*;
+import org.beeholy.holyCore.commands.AliasCommand;
+import org.beeholy.holyCore.commands.CratesCommand;
 import org.beeholy.holyCore.commands.admin.*;
 import org.beeholy.holyCore.commands.style.ColorCommand;
 import org.beeholy.holyCore.commands.style.GradientCommand;

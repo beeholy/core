@@ -40,7 +40,7 @@ public class PlayerJoinLeaveListener implements Listener {
         Tablist.send(player);
 
         // Set up no collision
-        CollisionManager.apply(event.getPlayer());
+        // CollisionManager.apply(event.getPlayer());
     }
 
     @EventHandler

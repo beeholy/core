@@ -1,11 +1,6 @@
 package org.beeholy.holyCore.skins;
 
-import org.beeholy.holyCore.HolyCore;
 import org.bukkit.Material;
-import org.bukkit.NamespacedKey;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.persistence.PersistentDataType;
 
 import java.util.Set;
 
@@ -14,9 +9,14 @@ import java.util.Set;
         private final String id;
         private final String name;
         private final String gradient;
+        private final String model;
         private final Set<Material> appliesTo;
         public String getId() {
             return id;
+        }
+
+        public String getModel() {
+            return model;
         }
 
         public String getName() {
@@ -36,11 +36,13 @@ import java.util.Set;
                 String id,
                 String name,
                 String gradient,
-                Set<Material> appliesTo
+                Set<Material> appliesTo,
+                String model
         ) {
             this.id = id;
             this.name = name;
             this.gradient = gradient;
+            this.model = model;
             this.appliesTo = appliesTo;
         }
 

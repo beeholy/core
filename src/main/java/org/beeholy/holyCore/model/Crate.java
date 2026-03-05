@@ -57,10 +57,13 @@ public class Crate {
         meta.displayName(TextUtils.deserialize(keyName).decorationIfAbsent(TextDecoration.ITALIC, TextDecoration.State.FALSE));
         meta.lore(deserializedLore);
 
-        CustomModelDataComponent modelDataComponent = meta.getCustomModelDataComponent();
-        modelDataComponent.setStrings(List.of(customModelData));
-        meta.setCustomModelDataComponent(modelDataComponent);
-
+        if(customModelData.startsWith("nexo:")) {
+            meta.setItemModel(NamespacedKey.fromString(customModelData));
+        } else {
+            CustomModelDataComponent modelDataComponent = meta.getCustomModelDataComponent();
+            modelDataComponent.setStrings(List.of(customModelData));
+            meta.setCustomModelDataComponent(modelDataComponent);
+        }
         NamespacedKey namespacedKey = new NamespacedKey(HolyCore.getInstance(), "crate_key");
         meta.getPersistentDataContainer().set(namespacedKey, PersistentDataType.STRING, key);
 

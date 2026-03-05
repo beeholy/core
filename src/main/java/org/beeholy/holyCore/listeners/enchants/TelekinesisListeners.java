@@ -8,21 +8,24 @@ import io.papermc.paper.event.block.PlayerShearBlockEvent;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
-import org.bukkit.block.BlockState;
+import org.bukkit.block.data.Ageable;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.block.*;
+import org.bukkit.event.block.Action;
+import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.block.BlockDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerShearEntityEvent;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.Damageable;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 import java.util.stream.Collectors;
+
+import static org.bukkit.Material.*;
 
 public class TelekinesisListeners implements Listener {
 
@@ -49,6 +52,14 @@ public class TelekinesisListeners implements Listener {
             NamespacedKey.fromString("holymc:treefeller")
     );
 
+    Enchantment harvester = Registry.ENCHANTMENT.get(
+            NamespacedKey.fromString("holymc:harvester")
+    );
+
+    Enchantment replant = Registry.ENCHANTMENT.get(
+            NamespacedKey.fromString("holymc:replant")
+    );
+
     private void giveOrDrop(Player player, Location location, List<ItemStack> items){
         for(ItemStack i : items) {
             PlayerGiveResult result = player.give(Collections.singleton(i), false);
@@ -59,7 +70,7 @@ public class TelekinesisListeners implements Listener {
         }
     }
     private List<ItemStack> giveReturnDrops(Player player, List<ItemStack> items){
-        List<ItemStack> returns = List.of();
+        List<ItemStack> returns = new ArrayList<>();
         for(ItemStack i : items) {
             PlayerGiveResult result = player.give(Collections.singleton(i), false);
             if(!result.leftovers().isEmpty()){
@@ -90,6 +101,17 @@ public class TelekinesisListeners implements Listener {
                  NETHER_GOLD_ORE,
                  NETHER_QUARTZ_ORE -> true;
             default -> false;
+        };
+    }
+
+    private Material getReplantable(Material material) {
+        return switch (material) {
+            case WHEAT -> WHEAT_SEEDS;
+            case POTATOES -> POTATO;
+            case CARROTS -> CARROT;
+            case BEETROOTS -> BEETROOT_SEEDS;
+            case NETHER_WART -> NETHER_WART;
+            default -> null;
         };
     }
 
@@ -244,11 +266,12 @@ public class TelekinesisListeners implements Listener {
         if (e.isCancelled()) return;
         Player player = e.getPlayer();
 
-        if(e.getBlock().getLocation().equals(lastLocationBroken.get(player.getUniqueId()))){
+        ItemStack usedItem = player.getInventory().getItemInMainHand();
+        Location location = e.getBlock().getLocation();
 
-            ItemStack usedItem = player.getInventory().getItemInMainHand();
+        if(location.equals(lastLocationBroken.get(player.getUniqueId()))){
+
             BlockFace blockFace = lastBrokenFace.get(player.getUniqueId());
-            Location location = e.getBlock().getLocation();
 
             // Three Break
             if(usedItem.getEnchantments().containsKey(threeBreak)){
@@ -259,6 +282,23 @@ public class TelekinesisListeners implements Listener {
                     if(!block.getLocation().equals(lastLocationBroken.get(player.getUniqueId()))) {
                         if (block.getType() == lastMaterial.get(player.getUniqueId())) {
                             player.breakBlock(block);
+                        }
+                    }
+                }
+            }
+            // Harvester
+            if(usedItem.getEnchantments().containsKey(harvester)){
+                HashSet<Block> blocks = getBlocks(location, BlockFace.DOWN, 0);
+
+                for(Block block : blocks) {
+                    if(!block.getLocation().equals(lastLocationBroken.get(player.getUniqueId()))) {
+                        if (block.getType() == lastMaterial.get(player.getUniqueId())) {
+                            if(block.getBlockData() instanceof Ageable data) {
+                                if (data.getAge() == data.getMaximumAge()){
+                                    player.breakBlock(block);
+                                }
+                            }
+
                         }
                     }
                 }
@@ -299,6 +339,7 @@ public class TelekinesisListeners implements Listener {
                 }
             }
         }
+
     }
 
     @EventHandler
@@ -334,8 +375,9 @@ public class TelekinesisListeners implements Listener {
     public void onBlockBreakDrop(BlockDropItemEvent e) {
         Player player = e.getPlayer();
 
-        ItemStack usedItem = player.getInventory().getItemInMainHand();
+        Block block = e.getBlock();
 
+        ItemStack usedItem = player.getInventory().getItemInMainHand();
 
         // Drops Awarded at end - after processing with telek check
         List<ItemStack> itemDrops = e.getItems()
@@ -344,7 +386,6 @@ public class TelekinesisListeners implements Listener {
                 .collect(Collectors.toCollection(ArrayList::new));
 
         Location location = e.getBlock().getLocation();
-
 
         if(usedItem.getEnchantments().containsKey(autoSmelt)) {
 
@@ -396,15 +437,47 @@ public class TelekinesisListeners implements Listener {
             itemDrops.clear();
             itemDrops.addAll(returns);
         }
-        if(!itemDrops.isEmpty()){
-            Item item = e.getItems().get(0);
-            e.getItems().clear();
-            for(ItemStack itemStack : itemDrops){
-                item.setItemStack(itemStack);
-                e.getItems().add(item);
+
+        if(usedItem.getEnchantments().containsKey(replant)){
+
+            Material farmableType = e.getBlockState().getType();
+            Material replantMaterial = getReplantable(farmableType);
+
+            if(replantMaterial != null) {
+                if(player.getInventory().first(replantMaterial) != -1) {
+                    ItemStack replantItem = player.getInventory().getItem(player.getInventory().first(replantMaterial));
+                    if (replantItem != null) {
+                        replantItem.setAmount(replantItem.getAmount() - 1);
+                        block.setType(farmableType);
+                    }
+                }
             }
         }
-        //e.getItems().clear();
+
+        if (!itemDrops.isEmpty()) {
+            List<Item> items = e.getItems();
+
+            for (int i = 0; i < items.size(); i++) {
+                if (i < itemDrops.size()) {
+                    items.get(i).setItemStack(itemDrops.get(i));
+                } else {
+                    items.get(i).remove();
+                }
+            }
+
+            // If you need more items than originally dropped:
+            if (itemDrops.size() > items.size()) {
+                Location loc = e.getBlock().getLocation();
+                for (int i = items.size(); i < itemDrops.size(); i++) {
+                    items.add(loc.getWorld().dropItemNaturally(loc, itemDrops.get(i)));
+                }
+            }
+        } else {
+            for (Item item : e.getItems()) {
+                item.remove();
+            }
+        }
+
     }
 
     // Shear Event (for beehive)

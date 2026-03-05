@@ -27,3 +27,6 @@ dependencies:
     GriefPrevention:
       load: BEFORE
       required: true
+    Nexo:
+      load: AFTER
+      required: true

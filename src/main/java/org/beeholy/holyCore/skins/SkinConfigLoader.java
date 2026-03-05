@@ -2,7 +2,6 @@ package org.beeholy.holyCore.skins;
 
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.configuration.file.FileConfiguration;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -21,6 +20,7 @@ public class SkinConfigLoader {
 
             String name = skinSec.getString("name");
             String gradient = skinSec.getString("gradient");
+            String model = skinSec.getString("model");
 
             Set<Material> appliesTo = skinSec.getStringList("applies_to")
                     .stream()
@@ -28,12 +28,25 @@ public class SkinConfigLoader {
                     .map(Material::valueOf)
                     .collect(Collectors.toSet());
 
-            skins.put(id, new Skin(
-                    id,
-                    name,
-                    gradient,
-                    appliesTo
-            ));
+            if (model != null){
+                skins.put(id, new Skin(
+                        id,
+                        name,
+                        gradient,
+                        appliesTo,
+                        model
+                ));
+            } else {
+                skins.put(id, new Skin(
+                        id,
+                        name,
+                        gradient,
+                        appliesTo,
+                        ""
+                ));
+            }
+
+
         }
 
         return skins;

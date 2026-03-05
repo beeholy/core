@@ -1,20 +1,16 @@
 package org.beeholy.holyCore.listeners.enchants;
 
-import com.destroystokyo.paper.event.player.PlayerArmorChangeEvent;
 import com.destroystokyo.paper.event.player.PlayerPostRespawnEvent;
 import io.papermc.paper.event.entity.EntityEquipmentChangedEvent;
-import org.bukkit.Bukkit;
 import org.bukkit.NamespacedKey;
 import org.bukkit.Registry;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.enchantments.Enchantment;
-import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerItemHeldEvent;
 import org.bukkit.inventory.EquipmentSlot;
-import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
@@ -38,7 +34,9 @@ public class StatusEffectListeners implements Listener {
             NamespacedKey.fromString("holymc:reach")
     );
 
-
+    Enchantment overload = Registry.ENCHANTMENT.get(
+            NamespacedKey.fromString("holymc:overload")
+    );
 
     @EventHandler
     public void onHandChange(PlayerItemHeldEvent event){
@@ -47,26 +45,32 @@ public class StatusEffectListeners implements Listener {
     public void applyEnchants(Player player, ItemMeta meta){
 
         if (meta.hasEnchant(glowing)) {
-            PotionEffect effect = new PotionEffect(PotionEffectType.NIGHT_VISION, PotionEffect.INFINITE_DURATION, 0);
+            PotionEffect effect = new PotionEffect(PotionEffectType.NIGHT_VISION, PotionEffect.INFINITE_DURATION, 0, false, false);
             player.addPotionEffect(effect);
         }
 
         if (meta.hasEnchant(aquatic)) {
-            PotionEffect effect = new PotionEffect(PotionEffectType.WATER_BREATHING, PotionEffect.INFINITE_DURATION, 0);
+            PotionEffect effect = new PotionEffect(PotionEffectType.WATER_BREATHING, PotionEffect.INFINITE_DURATION, 0, false, false);
             player.addPotionEffect(effect);
         }
         if (meta.hasEnchant(speed)) {
 
             int level = meta.getEnchantLevel(speed);
 
-            PotionEffect effect = new PotionEffect(PotionEffectType.SPEED, PotionEffect.INFINITE_DURATION, level - 1);
+            PotionEffect effect = new PotionEffect(PotionEffectType.SPEED, PotionEffect.INFINITE_DURATION, level - 1, false, false);
 
+            player.addPotionEffect(effect);
+        }
+
+        if (meta.hasEnchant(overload)) {
+            int level = meta.getEnchantLevel(overload);
+            PotionEffect effect = new PotionEffect(PotionEffectType.HEALTH_BOOST, PotionEffect.INFINITE_DURATION, level - 1, false, false);
             player.addPotionEffect(effect);
         }
 
         if (meta.hasEnchant(springs)) {
             int level = meta.getEnchantLevel(springs);
-            PotionEffect effect = new PotionEffect(PotionEffectType.JUMP_BOOST, PotionEffect.INFINITE_DURATION, level - 1);
+            PotionEffect effect = new PotionEffect(PotionEffectType.JUMP_BOOST, PotionEffect.INFINITE_DURATION, level - 1, false, false);
             player.addPotionEffect(effect);
         }
 
@@ -91,6 +95,10 @@ public class StatusEffectListeners implements Listener {
 
         if(meta.hasEnchant(springs)){
             player.removePotionEffect(PotionEffectType.JUMP_BOOST);
+        }
+
+        if(meta.hasEnchant(overload)){
+            player.removePotionEffect(PotionEffectType.HEALTH_BOOST);
         }
 
         if (meta.hasEnchant(reach)) {

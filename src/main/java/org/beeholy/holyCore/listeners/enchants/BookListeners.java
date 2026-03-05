@@ -1,6 +1,5 @@
 package org.beeholy.holyCore.listeners.enchants;
 
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;

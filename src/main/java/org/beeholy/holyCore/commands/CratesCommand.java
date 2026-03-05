@@ -118,7 +118,7 @@ public class CratesCommand implements BasicCommand {
                         String crateName = args[1];
                         if (Crates.getCrates().containsKey(crateName)) {
                             player.sendMessage(TextUtils.deserialize(Language.get("crate_set"), crateName));
-                            Crates.getCratesConfig().set(crateName + ".location", targetBlock.getLocation());
+                            Crates.getCratesConfig().set("crates." + crateName + ".location", targetBlock.getLocation());
                             Crates.save();
                             Crates.reload();
                         } else {

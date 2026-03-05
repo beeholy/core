@@ -4,7 +4,6 @@ import io.papermc.paper.command.brigadier.BasicCommand;
 import io.papermc.paper.command.brigadier.CommandSourceStack;
 import org.beeholy.holyCore.HolyCore;
 import org.beeholy.holyCore.utility.Language;
-import org.beeholy.holyCore.utility.Scoreboard;
 import org.beeholy.holyCore.utility.TextUtils;
 import org.bukkit.NamespacedKey;
 import org.bukkit.command.CommandSender;

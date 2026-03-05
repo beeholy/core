@@ -3,7 +3,6 @@ package org.beeholy.holyCore.utility;
 import net.kyori.adventure.bossbar.BossBar;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
-
 import org.beeholy.holyCore.HolyCore;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;

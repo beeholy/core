@@ -1,9 +1,8 @@
 package org.beeholy.holyCore.skins;
 
-import org.beeholy.holyCore.utility.Language;
-import org.bukkit.Bukkit;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
+
+import java.util.Objects;
 
 public class SkinManager {
 
@@ -23,6 +22,16 @@ public class SkinManager {
         SkinApplier.removeSkin(item);
     }
 
+    public Skin getSkinByModel(String model){
+        for(Skin skin : getRegistry().getAll()) {
+
+            if(Objects.equals(skin.getId(), model)) return skin;
+
+            if(Objects.equals(skin.getModel(), model)){return skin;}
+
+        }
+        return null;
+    }
     public SkinRegistry getRegistry() {
         return registry;
     }
