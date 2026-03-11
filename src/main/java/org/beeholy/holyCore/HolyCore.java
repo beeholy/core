@@ -9,9 +9,9 @@ import org.beeholy.holyCore.hooks.PAPIExpansion;
 import org.beeholy.holyCore.items.Vouchers;
 import org.beeholy.holyCore.listeners.*;
 import org.beeholy.holyCore.listeners.enchants.BookListeners;
-import org.beeholy.holyCore.listeners.enchants.BreakToolListeners;
 import org.beeholy.holyCore.listeners.enchants.StatusEffectListeners;
-import org.beeholy.holyCore.listeners.enchants.TelekinesisListeners;
+import org.beeholy.holyCore.listeners.enchants.BreakToolListeners;
+import org.beeholy.holyCore.listeners.enchants.WeaponListeners;
 import org.beeholy.holyCore.skins.SkinService;
 import org.beeholy.holyCore.utility.*;
 import org.bukkit.Bukkit;
@@ -72,9 +72,9 @@ public final class HolyCore extends JavaPlugin {
 
         // Enchantment Listeners
         Bukkit.getPluginManager().registerEvents(new BookListeners(), this);
-        Bukkit.getPluginManager().registerEvents(new TelekinesisListeners(), this);
         Bukkit.getPluginManager().registerEvents(new BreakToolListeners(), this);
         Bukkit.getPluginManager().registerEvents(new StatusEffectListeners(), this);
+        Bukkit.getPluginManager().registerEvents(new WeaponListeners(), this);
         Bukkit.getPluginManager().registerEvents(new SkinApplicatorListeners(), this);
 
         if (Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI")) { //

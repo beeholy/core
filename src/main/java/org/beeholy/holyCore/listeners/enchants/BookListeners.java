@@ -7,6 +7,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 
@@ -24,6 +25,8 @@ public class BookListeners implements Listener {
         if(e.isCancelled()) return;
 
         if(!player.hasPermission("holy.guienchant")) return;
+
+        if (!(e.getClickedInventory() instanceof PlayerInventory)) return;
 
         ItemStack cursor = e.getCursor();
         ItemStack clicked = e.getCurrentItem();

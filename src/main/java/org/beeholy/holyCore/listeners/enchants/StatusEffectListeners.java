@@ -2,6 +2,7 @@ package org.beeholy.holyCore.listeners.enchants;
 
 import com.destroystokyo.paper.event.player.PlayerPostRespawnEvent;
 import io.papermc.paper.event.entity.EntityEquipmentChangedEvent;
+import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.Registry;
 import org.bukkit.attribute.Attribute;
@@ -11,9 +12,16 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerItemHeldEvent;
 import org.bukkit.inventory.EquipmentSlot;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Objects;
+import java.util.stream.Stream;
 
 public class StatusEffectListeners implements Listener {
 
@@ -110,7 +118,21 @@ public class StatusEffectListeners implements Listener {
 
     @EventHandler
     public void onRespawn(PlayerPostRespawnEvent event){
-        event.getPlayer().getInventory().getArmorContents();
+        Player player = event.getPlayer();
+        List<ItemStack> contents = new ArrayList<>();
+        Stream.concat(
+                        Arrays.stream(event.getPlayer().getInventory().getArmorContents()),
+                        Stream.of(
+                                event.getPlayer().getInventory().getItemInMainHand(),
+                                event.getPlayer().getInventory().getItemInOffHand()
+                        )
+                ).filter(Objects::nonNull)
+                .filter(item -> item.getType() != Material.AIR)
+                .forEach(contents::add);
+
+        contents.forEach(itemStack -> {
+                applyEnchants(player, itemStack.getItemMeta());
+        });
     }
 
     @EventHandler

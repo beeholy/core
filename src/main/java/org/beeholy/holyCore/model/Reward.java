@@ -33,7 +33,7 @@ public class Reward {
         }
         meta.lore(deserializedLore);
 
-        if(customModelData.startsWith("nexo:")){
+        if(customModelData.contains(":")){
             meta.setItemModel(NamespacedKey.fromString(customModelData));
         } else {
             CustomModelDataComponent modelDataComponent = meta.getCustomModelDataComponent();

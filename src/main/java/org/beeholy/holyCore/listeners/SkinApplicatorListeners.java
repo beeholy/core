@@ -12,6 +12,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
 
@@ -23,6 +24,8 @@ public class SkinApplicatorListeners implements Listener {
         if (!(e.getWhoClicked() instanceof Player player)) return;
 
         if (e.isCancelled()) return;
+
+        if (!(e.getClickedInventory() instanceof PlayerInventory)) return;
 
         ItemStack cursor = e.getCursor();
         ItemStack clicked = e.getCurrentItem();

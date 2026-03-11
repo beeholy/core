@@ -28,6 +28,7 @@ public class Bootstrap implements PluginBootstrap {
         // Create new key for tools
         context.getLifecycleManager().registerEventHandler(LifecycleEvents.TAGS.preFlatten(RegistryKey.ITEM), event -> {
             TagKey<ItemType> toolsTag = TagKey.create(RegistryKey.ITEM, "holymc:tools");
+            TagKey<ItemType> toolsWeaponsTag = TagKey.create(RegistryKey.ITEM, "holymc:toolsweapons");
             TagKey<ItemType> shearsTag = TagKey.create(RegistryKey.ITEM, "holymc:shears");
 
             event.registrar().setTag(toolsTag, List.of(
@@ -35,6 +36,21 @@ public class Bootstrap implements PluginBootstrap {
                     TagEntry.tagEntry(ItemTypeTagKeys.SHOVELS),
                     TagEntry.tagEntry(ItemTypeTagKeys.AXES),
                     TagEntry.tagEntry(ItemTypeTagKeys.HOES),
+                    TagEntry.valueEntry(
+                            TypedKey.create(
+                                    RegistryKey.ITEM,
+                                    ItemType.SHEARS.key()
+                            )
+                    )
+            ));
+
+            event.registrar().setTag(toolsWeaponsTag, List.of(
+                    TagEntry.tagEntry(ItemTypeTagKeys.PICKAXES),
+                    TagEntry.tagEntry(ItemTypeTagKeys.SHOVELS),
+                    TagEntry.tagEntry(ItemTypeTagKeys.AXES),
+                    TagEntry.tagEntry(ItemTypeTagKeys.HOES),
+                    TagEntry.tagEntry(ItemTypeTagKeys.SWORDS),
+                    TagEntry.tagEntry(ItemTypeTagKeys.ENCHANTABLE_BOW),
                     TagEntry.valueEntry(
                             TypedKey.create(
                                     RegistryKey.ITEM,
@@ -83,7 +99,7 @@ public class Bootstrap implements PluginBootstrap {
             event.registry().register(
                     Telekinesis,
                     b -> b.description(Component.text("Telekinesis"))
-                            .supportedItems(event.getOrCreateTag(ItemTypeTagKeys.create(Key.key("holymc:tools"))))
+                            .supportedItems(event.getOrCreateTag(ItemTypeTagKeys.create(Key.key("holymc:toolsweapons"))))
                             .anvilCost(1)
                             .maxLevel(1)
                             .weight(10)
@@ -258,7 +274,7 @@ public class Bootstrap implements PluginBootstrap {
                     Springs,
                     b -> b.description(Component.text("Springs"))
                             .supportedItems(event.getOrCreateTag(ItemTypeTagKeys.FOOT_ARMOR))
-                            .anvilCost(40)
+                            .anvilCost(35)
                             .maxLevel(2)
                             .weight(10)
                             .minimumCost(EnchantmentRegistryEntry.EnchantmentCost.of(1, 10))
